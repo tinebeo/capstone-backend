@@ -1,10 +1,10 @@
 const express = require('express')
-const Compliance = require('../models/compliance')
+const Users = require('../models/user')
 const router = express.Router()
 
 //post data from MongoDB
 router.get('/', (req, res) => {
-    const posts = Compliance.find({}, (err, posts) => {
+    const posts = Users.find({}, (err, posts) => {
         if(!err){
             res.json(posts)
         } else {
