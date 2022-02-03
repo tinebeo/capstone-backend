@@ -2,9 +2,15 @@ const express = require('express')
 const Compliance = require('../models/compliance')
 const router = express.Router()
 
-//post data
+//post data from MongoDB
 router.get('/', (req, res) => {
-    res.send("Inside Home")
+    const posts = Compliance.find({}, (err, posts) => {
+        if(!err){
+            res.json(posts)
+        } else {
+            console.log(err)
+        }
+    })
 })
 
 //save data into MongoDB
