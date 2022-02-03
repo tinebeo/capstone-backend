@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 const compliance = new Compliance({
     schema_version: 1,
     report_number: 'N0142356',
-    record_type:{
+    record_type: {
         type: 'Reporitng test',
         record_detail: 'this is only for testing purpose'
     },
