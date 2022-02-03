@@ -17,4 +17,4 @@ const StandardSchema = new mongoose.Schema({
     }]
 })
 
-mongoose.model('Standard', StandardSchema)
+module.exports = mongoose.model('Standard', StandardSchema)
