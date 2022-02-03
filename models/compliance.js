@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const ComplianceSchema = new mongoose.Schema({
+const complianceSchema = new mongoose.Schema({
     schema_version: {
         type: Number,
         required: true
@@ -27,4 +27,4 @@ const ComplianceSchema = new mongoose.Schema({
     }
 })
 
-mongoose.model('Compliance', ComplianceSchema)
+module.exports = mongoose.model('Compliance', complianceSchema)
