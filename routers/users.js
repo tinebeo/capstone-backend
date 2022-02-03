@@ -16,18 +16,13 @@ router.get('/', (req, res) => {
 
 
 //save data into MongoDB
-//  const compliance = new Compliance({
+//  const user = new Users({
 //     schema_version: 1,
-//     report_number: 'N0142356',
-//     record_type: {
-//         type: 'Reporitng test',
-//         record_detail: 'this is only for testing purpose'
-//     },
-//     issued_date: '2022/02/01',
-//     expiry_date: '2022/02/02'
+//     user_email: 'N0142356@humber.ca',
+//     password: 'testonly'
 // })
-// compliance.save()
-// console.log(compliance)
+// user.save()
+// console.log(user)
 
 
 module.exports = router
