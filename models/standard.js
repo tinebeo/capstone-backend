@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const StandardSchema = new mongoose.Schema({
     schema_version: {
         type: Number,
-        value: 1,
         required: true
     },
     standard_name: {
