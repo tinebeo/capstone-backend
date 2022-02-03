@@ -7,6 +7,7 @@ const PORT = process.env.PORT
 
 // routers
 const indexRouter = require('./routers/index')
+const userRouter = require('./routers/users')
 const compliancesRouter = require('./routers/compliances')
 const standardsRouter = require('./routers/standards')
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded({extended: false}))
 
 //connect router
 app.use('/', indexRouter)
+app.use('/users', userRouter)
 app.use('/compliances', compliancesRouter)
 app.use('/standards', standardsRouter)
 
