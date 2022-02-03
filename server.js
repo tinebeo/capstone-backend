@@ -5,7 +5,9 @@ const express = require('express')
 const app = express()
 const PORT = process.env.PORT
 
+// routers
 const compliancesRouter = require('./routers/compliances')
+const standardsRouter = require('./routers/standards')
 
 
 //connect to MongoDB by mongoose
@@ -23,7 +25,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 //connect router
-app.use('/', compliancesRouter)
+app.use('/compliances', compliancesRouter)
+app.use('/standards', standardsRouter)
 
 //set the listen port and show the successful connect information
 app.listen(process.env.PORT, console.log(`Server is starting at ${PORT}`));
