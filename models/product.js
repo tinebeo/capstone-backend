@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const productSchema = new mongoose.Schema({
     schema_version: {
         type: Number,
+        default: 1,
         required: true
     },
     product_id: {
@@ -76,6 +77,7 @@ const productSchema = new mongoose.Schema({
                 required: true
             },
         },
+        //only the something come up when trade_mark
         family_series_model: {
             type: Array,
             required: true

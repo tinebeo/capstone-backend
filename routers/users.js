@@ -18,8 +18,8 @@ router.get('/', (req, res) => {
 //save data into MongoDB
 //  const user = new Users({
 //     schema_version: 1,
-//     user_email: 'N0142356@humber.ca',
-//     password: 'testonly'
+//     user_email: 'test@humber.ca',
+//     password: '1234567'
 // })
 // user.save()
 // console.log(user)
