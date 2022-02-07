@@ -1,10 +1,10 @@
 const express = require('express')
-const Users = require('../models/user')
+const User = require('../models/user')
 const router = express.Router()
 
 //post data from MongoDB
 router.get('/', (req, res) => {
-    const posts = Users.find({}, (err, posts) => {
+    const posts = User.find({}, (err, posts) => {
         if(!err){
             res.json(posts)
         } else {
@@ -13,16 +13,28 @@ router.get('/', (req, res) => {
     })
 })
 
+//new author route
+router.get('/new', (req, res)=>{
+    res.send('Create new user')
+})
 
-
-//save data into MongoDB
-//  const user = new Users({
-//     schema_version: 1,
-//     user_email: 'test@humber.ca',
-//     password: '1234567'
+//create new user
+// router.post('/new', async (req, res) => {
+//     const user = new User({
+//         user_email: req.body.user_email,
+//         password: req.body.password,
+//         role: req.body.role
+//     })
+//     try {
+//         const newUser = await users.save()
+//         res.redirect('users')
+//     } catch {
+//         res.render('users/new', {
+//             user: user,
+//             errorMessage: 'Error Creating Users'
+//         })
+//     }
 // })
-// user.save()
-// console.log(user)
 
 
 module.exports = router
