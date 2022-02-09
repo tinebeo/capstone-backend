@@ -3,14 +3,23 @@ const Compliance = require('../models/compliance')
 const router = express.Router()
 
 //post data from MongoDB
-router.get('/', (req, res) => {
-    const posts = Compliance.find({}, (err, posts) => {
-        if(!err){
-            res.json(posts)
-        } else {
-            console.log(err)
-        }
+router.get('/', async (req, res) => {
+    res.render('compliances/insert', {compliance: new Compliance() })
+})
+
+// create the new complinace
+router.post('/', async (req, res) => {
+    const compliance = new Compliance({
+        report_number: req.body.reportNumber,
+        record_type: {
+            type: req.body.reportType,
+            record_detail:req.body.reportDetail
+        },
+        issued_date: req.body.issuedDate,
+        expiry_date: req.body.expiryDate
     })
+    compliance.save()
+    res.send(compliance)
 })
 
 

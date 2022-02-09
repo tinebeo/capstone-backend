@@ -1,0 +1,27 @@
+<h2>Create New Compliances</h2>
+<form action="/compliances" method="POST">
+    <div>
+        <label>Report Number</label>
+        <input type="number" name="reportNumber" value="<%= compliance.report_number%>">
+    </div>  
+    
+    <div>
+        <label>Report Type</label>
+        <input type="text" name="reportType" value="<%= compliance.record_type.type%>" >
+        <label>Report Details</label>
+        <input type="text" name="reportDetail" value="<%= compliance.record_type.record_detail%>" >
+    </div>
+    
+    <div>
+        <label>Issued Date</label>
+        <input type="date" name="issuedDate" value="<%= compliance.issued_date%>" >
+    </div>
+    
+    <div>
+        <label>Expiry Date</label>
+        <input type="date" name="expiryDate" value="<%= compliance.expiry_date%>">
+    </div>   
+
+    <button type="submit">Create</button> 
+    <a href="/compliances">Cancel</a>
+</form>

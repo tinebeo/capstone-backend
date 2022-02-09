@@ -8,7 +8,6 @@ const complianceSchema = new mongoose.Schema({
     },
     report_number: {
         type: String,
-        required: true
     },
     record_type: {
         type: {
@@ -20,11 +19,9 @@ const complianceSchema = new mongoose.Schema({
     },
     issued_date: {
         type: Date,
-        required: true
     },
     expiry_date: {
         type: Date,
-        required: true
     }
 })
 
