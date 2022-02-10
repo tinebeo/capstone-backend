@@ -1,5 +1,5 @@
 <h2>Create New Compliances</h2>
-<form action="/compliances" method="POST">
+<form action="/compliances/new" method="POST">
     <div>
         <label>Report Number</label>
         <input type="number" name="reportNumber" value="<%= compliance.report_number%>">
@@ -23,5 +23,5 @@
     </div>   
 
     <button type="submit">Create</button> 
-    <a href="/compliances">Cancel</a>
+    <a href="/compliances/new">Cancel</a>
 </form>
