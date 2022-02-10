@@ -2,7 +2,7 @@
 <form action="/compliances/new" method="POST">
     <div>
         <label>Report Number</label>
-        <input type="number" name="reportNumber" value="<%= compliance.report_number%>">
+        <input type="text" name="reportNumber" value="<%= compliance.report_number%>">
     </div>  
     
     <div>
@@ -14,12 +14,16 @@
     
     <div>
         <label>Issued Date</label>
-        <input type="date" name="issuedDate" value="<%= compliance.issued_date%>" >
+        <input type="date" name="issuedDate" 
+            value="<%= compliance.issued_date == null ? '' :
+            compliance.issued_date.toISOString().split('T')[0] %>" >
     </div>
     
     <div>
         <label>Expiry Date</label>
-        <input type="date" name="expiryDate" value="<%= compliance.expiry_date%>">
+        <input type="date" name="expiryDate" 
+            value="<%= compliance.expiry_date== null ? '' :
+            compliance.expiry_date.toISOString().split('T')[0] %>">
     </div>   
 
     <button type="submit">Create</button> 

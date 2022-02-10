@@ -2,6 +2,30 @@ const express = require('express')
 const Compliance = require('../models/compliance')
 const router = express.Router()
 
+//find data into MongoDB
+router.get('/', async (req, res) => {
+    let query = Compliance.find()
+    if (req.query.reportNumber != null && req.query.reportNumber != ''){
+        query = query.regex('report_number', new RegExp(req.query.reportNumber.trim(), 'i'))
+    }
+    if (req.query.issuedDate != null && req.query.issuedDate != ''){
+        query = query.lte('issued_date', req.query.issuedDate)
+    }
+    if (req.query.expiryDate != null && req.query.expiryDate!= ''){
+        query = query.lte('expiry_date', req.query.expiryDate)
+    }
+    try {
+        const compliances = await query.exec()
+        res.render('compliances/search', {
+            compliances: compliances,
+            searchOptions: req.query
+        })
+    } catch {
+        res.redirect('/compliances')
+    }
+})
+
+
 // get to the front-end page
 router.get('/new', async (req, res) => {
     res.render('compliances/insert', {compliance: new Compliance() })
@@ -20,30 +44,6 @@ router.post('/new', async (req, res) => {
     })
     compliance.save()
     res.redirect('/compliances')
-})
-
-
-//find data into MongoDB
-router.get('/', async (req, res) => {
-    let query = Compliance.find()
-    if (req.query.reportNumber != null && req.query.reportNumber != ''){
-        query = query.regex('report_number', new RegExp(req.query.reportNumber, 'i'))
-    }
-    // if (req.query.issued_date != null && req.query.issued_date != ''){
-    //     query = query.lte('issued_date', req.query.issued_date)
-    // }
-    // if (req.query.expiry_date != null && req.query.expiry_date!= ''){
-    //     query = query.gte('expiry_date', req.query.expiry_date)
-    // }
-    try {
-        const compliances = await query.exec()
-        res.render('compliances/search', {
-            compliances: compliances,
-            searchOptions: req.query
-        })
-    } catch {
-        res.redirect('/compliances')
-    }
 })
 
 
