@@ -1,0 +1,28 @@
+<h2>Search Compliances</h2>
+<form action="/compliances" method="GET">
+    <div>
+        <label>Report Number</label>
+        <input type="number" name="reportNumber" value="<%= searchOptions.reportNumber %> ">
+    </div>
+    <div>
+        <label>issued Date</label>
+        <input type="date" name="issuedDate" value="<%= searchOptions.issuedDate %> ">
+    </div>
+    <div>
+        <label>Expiry Date</label>
+        <input type="date" name="expiryDate" value="<%= searchOptions.expiryDate %> ">
+    </div>
+
+    <button type="submit">Search</button>
+</form>
+
+<% compliances.forEach(compliance => { %>
+    <div><%= compliance.report_number  %> </div>
+    <div><%= compliance.record_type.type  %> </div>
+    <div><%= compliance.record_type.record_detail  %> </div>
+    <div><%= compliance.issued_date  %> </div>
+    <div><%= compliance.expiry_date  %> </div>
+    <br>
+ <% }) %> 
+
+
