@@ -41,7 +41,6 @@ router.get('/search', async (req, res) => {
             compliances: compliances,
             searchOptions: req.query
         })
-        res.redirect('compliances/search')
     } catch {
         res.redirect('/')
     }
