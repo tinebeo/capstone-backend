@@ -27,7 +27,7 @@ router.post('/new', async (req, res) => {
 router.get('/', async (req, res) => {
     let query = Compliance.find()
     if (req.query.reportNumber != null && req.query.reportNumber != ''){
-        query = req.query.reportNumber
+        query = query.regex('report_number', new RegExp(req.query.reportNumber, 'i'))
     }
     // if (req.query.issued_date != null && req.query.issued_date != ''){
     //     query = query.lte('issued_date', req.query.issued_date)
@@ -37,7 +37,6 @@ router.get('/', async (req, res) => {
     // }
     try {
         const compliances = await query.exec()
-        console.log(compliances)
         res.render('compliances/search', {
             compliances: compliances,
             searchOptions: req.query

@@ -7,7 +7,7 @@ const complianceSchema = new mongoose.Schema({
         required: true
     },
     report_number: {
-        type: Number,
+        type: String,
     },
     record_type: {
         type: {
