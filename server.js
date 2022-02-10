@@ -11,6 +11,7 @@ const indexRouter = require('./routers/index')
 const userRouter = require('./routers/users')
 const compliancesRouter = require('./routers/compliances')
 const standardsRouter = require('./routers/standards')
+const productsRouter = require('./routers/products')
 
 //ejs setting
 app.set('view engine', 'ejs')
@@ -36,6 +37,7 @@ app.use('/', indexRouter)
 app.use('/users', userRouter)
 app.use('/compliances', compliancesRouter)
 app.use('/standards', standardsRouter)
+app.use('/products', productsRouter)
 
 //set the listen port and show the successful connect information
 app.listen(process.env.PORT, console.log(`Server is starting at ${PORT}`));
