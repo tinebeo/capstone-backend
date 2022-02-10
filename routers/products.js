@@ -8,7 +8,7 @@ router.post('/add', (req, res) => {
     //res.send(req.body)
     const product = new Product(req.body)
     product.product_id = uuidv4()
-    product.save(req.body, function (err, docs) {
+    product.save(product, function (err, docs) {
         if (err){ 
             console.error(err);
             res.status(400).send({message: "Error adding product"})
