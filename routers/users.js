@@ -20,7 +20,7 @@ router.post('/register', async (req, res)=>{
         if(name){
             res.send({message: "username already exist!!"})
         } else {
-            const user = new User({userName, userEmail, password, role})
+            const user = await new User({userName, userEmail, password, role})
             user.save(err => {
                 if(err){
                     res.send(err)
