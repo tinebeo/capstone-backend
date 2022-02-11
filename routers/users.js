@@ -14,13 +14,13 @@ router.get('/', (req, res) => {
 })
 
 // register new user
-router.post('/register', async (req, res)=>{
+router.post('/register', (req, res)=>{
     const {userName, userEmail, password, role} = req.body
     User.findOne({userEmail: userEmail} ,(err , name) => {
         if(name){
             res.send({message: "username already exist!!"})
         } else {
-            const user = await new User({userName, userEmail, password, role})
+            const user = new User({userName, userEmail, password, role})
             user.save(err => {
                 if(err){
                     res.send(err)
