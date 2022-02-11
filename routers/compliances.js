@@ -25,7 +25,6 @@ router.get('/', async (req, res) => {
     }
 })
 
-
 // get to the front-end page
 router.get('/new', async (req, res) => {
     res.render('compliances/insert', {compliance: new Compliance() })

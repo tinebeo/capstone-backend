@@ -2,7 +2,7 @@ const express = require('express')
 const User = require('../models/user')
 const router = express.Router()
 
-//post data from MongoDB
+//get data from MongoDB
 router.get('/', (req, res) => {
     const posts = User.find({}, (err, posts) => {
         if(!err){
@@ -13,12 +13,26 @@ router.get('/', (req, res) => {
     })
 })
 
-//new author route
-router.get('/new', (req, res)=>{
-    res.send('Create new user')
+// register new user
+router.post('/register', async (req, res)=>{
+    const {userName, userEmail, password, role} = req.body
+    User.findOne({userEmail: userEmail} ,(err , name) => {
+        if(name){
+            res.send({message: "username already exist!!"})
+        } else {
+            const user = new User({userName, userEmail, password, role})
+            user.save(err => {
+                if(err){
+                    res.send(err)
+                } else {
+                    res.send({message:"Sucessfully Create"})
+                }
+            })
+        }
+    })
 })
 
-//create new user
+// log in user
 // router.post('/new', async (req, res) => {
 //     const user = new User({
 //         user_email: req.body.user_email,
