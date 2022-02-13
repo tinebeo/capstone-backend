@@ -18,11 +18,14 @@ router.get('/', (req, res) => {
 // register new user
 router.post('/register', (req, res)=>{
     const {userName, userEmail, password, role} = req.body
+
+    // check the whether the user-email exists in database
     User.findOne({userEmail: userEmail} ,(err , email) => {
         if(email){
             res.send({message: "Email already exist!!"})
         } else {
             const user = new User({userName, userEmail, password, role})
+            // encrypt the password 
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(user.password, salt, (err, hash) => {
                     if (err) throw err
@@ -44,10 +47,13 @@ router.post('/register', (req, res)=>{
 router.post('/login', async (req, res) => {
     const userEmail = req.body.userEmail
     const password = req.body.password
+    
+    // find if the user email exsit in the database
     User.findOne({userEmail: userEmail}, (err, user) =>{
         if (!user) {
             return res.status(404).send({message:"Email not found!!"})
-        } 
+        }
+        // compare the typed password and encrypted password is matched or not 
         bcrypt.compare(password, user.password, (err, data) => {
             if (data) {
                 const payload = {
@@ -55,6 +61,7 @@ router.post('/login', async (req, res) => {
                     name: user.name
                 }
 
+                //give the access token to the user
                 jwt.sign(
                     payload, 
                     process.env.secretOrKey, 
