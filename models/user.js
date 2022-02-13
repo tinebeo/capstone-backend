@@ -18,12 +18,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    confrimPassword:{
-        type: String,
-    },
     role:{
         type: String,
-        enum: ['guest', 'reader', 'editor', 'superuser'],
+        enum: ['Super_Admin', 'Admin', 'Author', 'Viewer', 'Reviewer', 'Approver'],
+        default: 'Viewer',
         required: true
     }
 })

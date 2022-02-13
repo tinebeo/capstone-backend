@@ -1,4 +1,4 @@
-require("dotenv").config({path: "./config.env"})
+require("dotenv").config({path: "./config/config.env"})
 
 //npm packages
 const express = require('express')
@@ -6,7 +6,10 @@ const app = express()
 const expressLayouts = require('express-ejs-layouts')
 const PORT = process.env.PORT
 
-// routers
+//passport
+const passport = require('passport')
+
+//routers
 const indexRouter = require('./routers/index')
 const userRouter = require('./routers/users')
 const compliancesRouter = require('./routers/compliances')
@@ -19,6 +22,10 @@ app.set('views', __dirname + '/views')
 app.set('layout', 'layouts/layout')
 app.use(expressLayouts)
 
+app.use(passport.initialize());
+require('./config/passport')(passport)
+
+
 //Data parasing
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
@@ -26,7 +33,7 @@ app.use(express.urlencoded({extended: false}))
 //connect to MongoDB by mongoose
 const mongoose = require('mongoose')
 mongoose.connect(process.env.DATABASE_URL, {
-    useNewUrlParser:true
+    useNewUrlParser:true,
 })
 const db = mongoose.connection
 db.on('error', err => console.error(err))
