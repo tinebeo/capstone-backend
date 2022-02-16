@@ -181,6 +181,9 @@ const productSchema = new mongoose.Schema({
             type: String
         }
     },
+    compliance_report_number: [{
+        type: String
+    }],
     last_updated_status: {
         last_updated_by: {
             type: String
