@@ -4,6 +4,7 @@ require("dotenv").config({path: "./config/config.env"})
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
+const cors = require('cors')
 const PORT = process.env.PORT
 
 //passport
@@ -25,6 +26,7 @@ app.use(expressLayouts)
 app.use(passport.initialize());
 require('./config/passport')(passport)
 
+app.use(cors())
 
 //Data parasing
 app.use(express.json())
