@@ -14,6 +14,18 @@ router.get('/', (req, res) => {
         }) 
 })
 
+// get specific standard given a category
+// path: standards/category?id=<standard_category>
+router.get('/product', (req, res) => {
+    Standard.find({"product_id": req.query.id.toLowerCase()})
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
+
 // update a product given a product_id
 router.put('/update', (req, res) => {
     Product.findOneAndUpdate({"product_id": req.query.id}, req.body, {new: true})
