@@ -25,6 +25,18 @@ router.get('/', async (req, res) => {
     }
 })
 
+// get specific compliance given report number
+// path: compliances/report?id=<report_number>
+router.get('/report', (req, res) => {
+    Compliance.find({"report_number": req.query.id})
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
+
 // get to the front-end page
 router.get('/new', async (req, res) => {
     res.render('compliances/insert', {compliance: new Compliance() })

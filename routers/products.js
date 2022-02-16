@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 // get specific standard given a category
 // path: standards/category?id=<standard_category>
 router.get('/product', (req, res) => {
-    Standard.find({"product_id": req.query.id.toLowerCase()})
+    Product.find({"product_id": req.query.id.toLowerCase()})
         .then((result) => {
             res.send(result)
         })
