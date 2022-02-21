@@ -1,7 +1,7 @@
 const express = require('express')
 const Compliance = require('../models/compliance')
 const router = express.Router()
-const {authUser} = require('../permission/basicAuth')
+const {authUser, authDeleteRole} = require('../permission/basicAuth')
 
 // get all compliances
 router.get('/', (req, res) => {
@@ -16,6 +16,7 @@ router.get('/', (req, res) => {
 
 
 // get specific compliance given report number
+// give the middleware to permission
 // path: compliances/report?report_number=<report_number>
 router.get('/find', authUser, (req, res) => {
     let query = Compliance.find()
@@ -51,7 +52,7 @@ router.post('/add', (req, res) => {
 })
 
 // delete complinaces by given report_numbers
-router.delete('/delete', (req, res) => {
+router.delete('/delete', authUser, authDeleteRole(), (req, res) => {
     try {
         Compliance.find({"report_number":req.query.report_number}).then((result) => {
             if (result.length == 0){
