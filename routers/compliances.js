@@ -52,7 +52,7 @@ router.post('/add', (req, res) => {
 })
 
 // delete complinaces by given report_numbers
-router.delete('/delete', authUser, authDeleteRole(), (req, res) => {
+router.delete('/delete', authUser, authDeleteRole, (req, res) => {
     try {
         Compliance.find({"report_number":req.query.report_number}).then((result) => {
             if (result.length == 0){
