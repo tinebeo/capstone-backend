@@ -33,9 +33,9 @@ const productSchema = new mongoose.Schema({
         model_difference: {
             type: String,
         },
-        intended_environment: {
-            type: String,
-        },
+        intended_environment: [{
+            type: String
+        }],
         applicable_standard: {
             type: String,
         },
