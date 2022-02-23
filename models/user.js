@@ -23,6 +23,9 @@ const UserSchema = new mongoose.Schema({
         enum: ['Super_Admin', 'Admin', 'Author', 'Viewer', 'Reviewer', 'Approver'],
         default: 'Viewer',
         required: true
+    },
+    refreshToken:{
+        type: String
     }
 })
 

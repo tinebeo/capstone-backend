@@ -10,6 +10,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    user_id:{
+        type: String,
+        required: true
+    },
     product_details : {
         regulatory_model_name: {
             type: String,

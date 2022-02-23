@@ -1,19 +1,16 @@
 require("dotenv").config({ path: "./config/config.env" })
 
-//npm packages
+// npm packages
 const express = require('express')
 const app = express()
-const expressLayouts = require('express-ejs-layouts')
 const cors = require('cors')
 const PORT = process.env.PORT
+const passport = require('passport')
 
 // file upload
 const Grid = require('gridfs-stream');
 
-//passport
-const passport = require('passport')
-
-//routers
+// routers
 const indexRouter = require('./routers/index')
 const userRouter = require('./routers/users')
 const compliancesRouter = require('./routers/compliances')
@@ -21,18 +18,13 @@ const standardsRouter = require('./routers/standards')
 const productsRouter = require('./routers/products')
 const filesRouter = require('./routers/files')
 
-//ejs setting
-app.set('view engine', 'ejs')
-app.set('views', __dirname + '/views')
-app.set('layout', 'layouts/layout')
-app.use(expressLayouts)
+// middlewares
+const verifyJWT = require('./permission/verifyJWT.js')
+
 
 app.use(passport.initialize());
 require('./config/passport')(passport)
-
 app.use(cors())
-
-//Data parasing
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -56,16 +48,18 @@ db.once('open', () => {
 })
 
 //connect router
-app.use('/', indexRouter)
-app.use('/users', userRouter)
-app.use('/compliances', compliancesRouter)
-app.use('/standards', standardsRouter)
-app.use('/products', productsRouter)
+app.use('/', indexRouter);
+app.use('/users', userRouter);
+
+app.use(verifyJWT);
+app.use('/compliances', compliancesRouter);
+app.use('/standards', standardsRouter);
+app.use('/products', productsRouter);
 app.use('/files', (req, res, next) => {
     req.gfs = gfs
     req.gridfsBucket = gridfsBucket
     next()
-}, filesRouter)
+}, filesRouter);
 
 app.use('/', function (req, res, next) {
     res.header("Access-Control-Allow-Origin", '*');

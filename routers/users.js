@@ -57,22 +57,22 @@ router.post('/login', async (req, res) => {
         bcrypt.compare(password, user.password, (err, data) => {
             if (data) {
                 const payload = {
-                    id: user.id,
-                    name: user.name
+                    userEmail: user.userEmail,
+                    role: user.role
                 }
+                
+                //give the access token and refresh token to the user
+                const accessToken = generateAccessToken(payload)
+                const refreshToken = generateRefreshToken(payload)
+                
+                user.refreshToken = refreshToken;
+                const save = user.save()
 
-                //give the access token to the user
-                jwt.sign(
-                    payload, 
-                    process.env.secretOrKey, 
-                    {expiresIn: 31556926},
-                    (err, token) => {
-                        res.json({
-                            success: true,
-                            token: "Bearer" + token
-                        })
-                    }
-                )
+                res.json({
+                    "message": "success",
+                    "role": payload.role,
+                    "accessToken": accessToken
+                })
             } else {
                 return res.status(400).send({message:"password incorrect"})
             }
@@ -80,5 +80,12 @@ router.post('/login', async (req, res) => {
     })
 })
 
+
+function generateAccessToken(payload) {
+    return jwt.sign(payload, process.env.secretOrKey_access, {expiresIn: '10m'})
+}
+function generateRefreshToken(payload) {
+    return jwt.sign(payload, process.env.secretOrKey_refresh, {expiresIn: '1d'})
+}
 
 module.exports = router
