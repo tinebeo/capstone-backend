@@ -51,7 +51,7 @@ db.once('open', () => {
 app.use('/', indexRouter);
 app.use('/users', userRouter);
 
-app.use(verifyJWT);
+//app.use(verifyJWT);
 app.use('/compliances', compliancesRouter);
 app.use('/standards', standardsRouter);
 app.use('/products', productsRouter);
