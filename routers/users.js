@@ -44,12 +44,12 @@ router.post('/register', (req, res)=>{
 })
 
 // log in user
-router.post('/login', async (req, res) => {
+router.post('/login', (req, res) => {
     const userEmail = req.body.userEmail
     const password = req.body.password
     
     // find if the user email exsit in the database
-    User.findOne({userEmail: userEmail}, (err, user) =>{
+    User.findOne({"userEmail": userEmail}, (err, user) =>{
         if (!user) {
             return res.status(404).send({message:"Email not found!!"})
         }
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
                 const refreshToken = generateRefreshToken(payload)
                 
                 user.refreshToken = refreshToken;
-                const save = user.save()
+                user.save()
 
                 res.json({
                     "message": "success",
@@ -80,6 +80,60 @@ router.post('/login', async (req, res) => {
     })
 })
 
+// forget password
+router.put('/forgetPassword', (req, res) => {
+    const userEmail = req.body.userEmail
+    User.findOne({"userEmail": userEmail}, (err, user) => {
+        if (!user) {
+            return res.status(404).send({message:"Email not found!!"})
+        } 
+        const token = jwt.sign({"_id":user._id}, process.env.secretOrKey_resetPassword, {expiresIn: '5m'})
+        return user.updateOne({"resetLink": token}, (err, success) => {
+            if (err) {
+                return res.status(400).json({message: err})
+            } else {
+                return res.json({message: 'update the user successfully, please redirect to the reset router'})
+            }
+        })
+    })
+})
+
+// reset password
+router.put('/resetPassword', (req, res) => {
+    const newPass = req.body.newPass
+    const userEmail = req.body.userEmail
+    User.findOne({"userEmail":userEmail}, (err, user) => {
+        if (!user) {
+            return res.status(404).send({message:"Email not found!!"})
+        }
+        const resetLink = user.resetLink
+        if (resetLink) {
+            jwt.verify(resetLink, process.env.secretOrKey_resetPassword, function(err) {
+                if(err) {
+                    return res.json({
+                        error: err
+                    })
+                }
+                User.findOne({resetLink}, (err, user) => {
+                    bcrypt.genSalt(10, (err, salt) => {
+                        bcrypt.hash(newPass, salt, (err, hash) => {
+                            if (err) throw err
+                            user.updateOne({"password":hash, "resetLink":''}, (err) => {
+                                if (err) {
+                                    return res.status(400).json({message: err})
+                                } else {
+                                    return res.json({message: 'Your password has been changed!'})
+                                }
+                            })
+                        })
+                    })
+                })
+            })
+        } else {
+            return res.status(401).json({error:"Authentication error!!"})
+        }
+    })
+})
 
 function generateAccessToken(payload) {
     return jwt.sign(payload, process.env.secretOrKey_access, {expiresIn: '10m'})
