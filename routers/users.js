@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
                 
                 user.refreshToken = refreshToken;
                 user.save()
-
+                res.cookie('jwt', refreshToken, {httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 })
                 res.json({
                     "message": "success",
                     "role": payload.role,
@@ -75,6 +75,58 @@ router.post('/login', (req, res) => {
                 })
             } else {
                 return res.status(400).send({message:"password incorrect"})
+            }
+        })
+    })
+})
+
+// refresh the user
+router.get('/refresh', (req, res) => {
+    const cookies = req.cookies
+    if (!cookies?.jwt) return res.sendStatus(401)
+    const refreshToken = cookies.jwt
+    // find if the refresh token exsit in the database
+    User.findOne({"refreshToken":refreshToken}, (err, user) =>{
+        if (!user) {
+            return res.sendStatus(403)
+        }           
+        jwt.verify(refreshToken, process.env.secretOrKey_refresh, (err, decoded) => {
+            if (err) return res.sendStatus(403)
+            const payload = {
+                userEmail: decoded.userEmail,
+                role: decoded.role
+            }
+            const accessToken = generateAccessToken(payload)
+            res.json({
+                "message": "success",
+                "role": payload.role,
+                "accessToken": accessToken
+            })
+        })
+    })
+})
+
+// logout
+router.get('/logout', (req, res) => {
+    // On client, clean the accessToken
+    const cookies = req.cookies
+    if (!cookies?.jwt) return res.sendStatus(204)
+    const refreshToken = cookies.jwt
+
+    // find if the refresh token exsit in the database
+    User.findOne({"refreshToken":refreshToken}, (err, user) =>{
+        if (!user) {
+            res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true})
+            return res.sendStatus(403)
+        }           
+        
+        //Delete refresh token
+        user.updateOne({"refreshToken":''}, (err) => {
+            if (err) {
+                return res.status(400).json({message: err})
+            } else {
+                res.clearCookie('jwt', {httpOnly:true, sameSite: 'None', secure: true})
+                return res.sendStatus(204)
             }
         })
     })
