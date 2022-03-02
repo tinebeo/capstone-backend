@@ -36,7 +36,14 @@ const rfqSchema = new mongoose.Schema({
     },
     statement:{
         type: String
+    },
+    status: {
+        type: String
+    },
+    stages: {
+        type: String
     }
+
 })
 
 module.exports = mongoose.model('RFQ', rfqSchema)
