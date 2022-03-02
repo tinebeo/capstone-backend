@@ -22,6 +22,7 @@ const filesRouter = require('./routers/files')
 
 // middlewares
 const verifyJWT = require('./permission/verifyJWT.js')
+const cookieParser = require('cookie-parser')
 
 
 app.use(passport.initialize());
@@ -29,6 +30,7 @@ require('./config/passport')(passport)
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
 
 //connect to MongoDB by mongoose
 const mongoose = require('mongoose')

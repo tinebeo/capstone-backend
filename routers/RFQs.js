@@ -31,7 +31,7 @@ router.get('/find', authUser, (req, res) => {
     })
 })
 
-// create the new complinace to MongoDB
+// create the new RFQ to MongoDB
 router.post('/add', (req, res) => {
     const rfq = new RFQ(req.body)
     rfq.rfqNumber = uuidv4()
@@ -44,7 +44,7 @@ router.post('/add', (req, res) => {
     })
 })
 
-// delete complinaces by given report_numbers
+// delete the RFQ by given rfqNumber
 router.delete('/delete', authUser, authDeleteRole, (req, res) => {
     try {
         RFQ.find({"rfqNumber":req.query.rfqNumber}).then((result) => {
