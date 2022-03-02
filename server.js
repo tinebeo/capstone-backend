@@ -13,6 +13,7 @@ const Grid = require('gridfs-stream');
 // routers
 const indexRouter = require('./routers/index')
 const userRouter = require('./routers/users')
+const companiesRouter = require('./routers/companies')
 const compliancesRouter = require('./routers/compliances')
 const standardsRouter = require('./routers/standards')
 const productsRouter = require('./routers/products')
@@ -55,6 +56,7 @@ app.use('/', indexRouter);
 app.use('/users', userRouter);
 
 //app.use(verifyJWT);
+app.use('/companies', companiesRouter);
 app.use('/compliances', compliancesRouter);
 app.use('/standards', standardsRouter);
 app.use('/products', productsRouter);

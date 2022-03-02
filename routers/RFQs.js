@@ -2,6 +2,7 @@ const express = require('express')
 const RFQ = require('../models/RFQ')
 const router = express.Router()
 const {authUser, authDeleteRole} = require('../permission/basicAuth')
+const { v4: uuidv4 } = require('uuid');
 
 // get all RFQs
 router.get('/', (req, res) => {
@@ -33,6 +34,7 @@ router.get('/find', authUser, (req, res) => {
 // create the new RFQ to MongoDB
 router.post('/add', (req, res) => {
     const rfq = new RFQ(req.body)
+    rfq.rfqNumber = uuidv4()
     rfq.save(err => {
         if(err){
             res.send(err)

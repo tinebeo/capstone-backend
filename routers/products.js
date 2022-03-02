@@ -14,8 +14,7 @@ router.get('/', (req, res) => {
         }) 
 })
 
-// get specific standard given a category
-// path: standards/category?id=<standard_category>
+// get specific standard given a product_id
 router.get('/product', (req, res) => {
     Product.find({"product_id": req.query.id.toLowerCase()})
         .then((result) => {
@@ -24,6 +23,24 @@ router.get('/product', (req, res) => {
         .catch((err) => {
             console.log(err)
         })
+})
+
+// get products given a category and standard
+// path: products/category?id=<standard_category>&standard=<standard_body>
+// e.g., http://localhost:5000/products/category?id=MEAS&standard=IEC%2061010-031%3A2002
+router.get('/category', (req, res) => {
+    console.log(req.query.id.toLowerCase())
+    Product.find({
+        "product_details.product_category": req.query.id.toUpperCase(),
+        "product_details.applicable_standard": req.query.standard.toUpperCase()
+    })
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+        
 })
 
 // update a product given a product_id
