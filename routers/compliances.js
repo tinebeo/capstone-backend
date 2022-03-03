@@ -1,7 +1,7 @@
 const express = require('express')
 const Compliance = require('../models/compliance')
 const router = express.Router()
-const {authUser, authDeleteRole} = require('../permission/basicAuth')
+const {authUser, authRWRole, authDeleteRole} = require('../permission/basicAuth')
 
 // get all compliances
 router.get('/', (req, res) => {
@@ -32,7 +32,7 @@ router.get('/find', authUser, (req, res) => {
 })
 
 // create the new complinace to MongoDB
-router.post('/add', (req, res) => {
+router.post('/add', authRWRole, (req, res) => {
     const compliance = new Compliance({
         "report_number": req.query.report_number,
         "record_type": {
@@ -52,7 +52,7 @@ router.post('/add', (req, res) => {
 })
 
 // delete complinaces by given report_numbers
-router.delete('/delete', authUser, authDeleteRole, (req, res) => {
+router.delete('/delete', authDeleteRole, (req, res) => {
     try {
         Compliance.find({"report_number":req.query.report_number}).then((result) => {
             if (result.length == 0){

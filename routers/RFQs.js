@@ -1,7 +1,7 @@
 const express = require('express')
 const RFQ = require('../models/RFQ')
 const router = express.Router()
-const {authUser, authDeleteRole} = require('../permission/basicAuth')
+const {authUser, authRWRole} = require('../permission/basicAuth')
 const { v4: uuidv4 } = require('uuid');
 
 // get all RFQs
@@ -32,7 +32,7 @@ router.get('/find', authUser, (req, res) => {
 })
 
 // create the new RFQ to MongoDB
-router.post('/add', (req, res) => {
+router.post('/add', authRWRole, (req, res) => {
     const rfq = new RFQ(req.body)
     rfq.rfqNumber = uuidv4()
     rfq.save(err => {
@@ -45,20 +45,20 @@ router.post('/add', (req, res) => {
 })
 
 // delete the RFQ by given rfqNumber
-router.delete('/delete', authUser, authDeleteRole, (req, res) => {
-    try {
-        RFQ.find({"rfqNumber":req.query.rfqNumber}).then((result) => {
-            if (result.length == 0){
-                res.status(404).send({message: "The RFQ does not exist"})
-                return
-            }
-            RFQ.deleteOne({"rfqNumber":req.query.rfqNumber}).then(() => {
-                res.status(200).send({message: "The RFQ deleted successfully"})
-            })
-        })
-    } catch (err) {
-        res.send(err) 
-    }
-})
+// router.delete('/delete', authUser, authDeleteRole, (req, res) => {
+//     try {
+//         RFQ.find({"rfqNumber":req.query.rfqNumber}).then((result) => {
+//             if (result.length == 0){
+//                 res.status(404).send({message: "The RFQ does not exist"})
+//                 return
+//             }
+//             RFQ.deleteOne({"rfqNumber":req.query.rfqNumber}).then(() => {
+//                 res.status(200).send({message: "The RFQ deleted successfully"})
+//             })
+//         })
+//     } catch (err) {
+//         res.send(err) 
+//     }
+// })
 
 module.exports = router
