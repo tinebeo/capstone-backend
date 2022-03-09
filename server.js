@@ -12,12 +12,12 @@ const Grid = require('gridfs-stream');
 
 // routers
 const indexRouter = require('./routers/index')
-const userRouter = require('./routers/users')
+const usersRouter = require('./routers/users')
 const companiesRouter = require('./routers/companies')
 const compliancesRouter = require('./routers/compliances')
 const standardsRouter = require('./routers/standards')
 const productsRouter = require('./routers/products')
-const RFQRouter = require('./routers/RFQs')
+const RFQsRouter = require('./routers/RFQs')
 const filesRouter = require('./routers/files')
 
 // middlewares
@@ -53,14 +53,14 @@ db.once('open', () => {
 
 //connect router
 app.use('/', indexRouter);
-app.use('/users', userRouter);
+app.use('/users', usersRouter);
 
 //app.use(verifyJWT);
 app.use('/companies', companiesRouter);
 app.use('/compliances', compliancesRouter);
 app.use('/standards', standardsRouter);
 app.use('/products', productsRouter);
-app.use('/RFQs', RFQRouter);
+app.use('/RFQs', RFQsRouter);
 app.use('/files', (req, res, next) => {
     req.gfs = gfs
     req.gridfsBucket = gridfsBucket
