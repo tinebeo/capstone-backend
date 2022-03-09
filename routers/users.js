@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
                 
                 user.refreshToken = refreshToken;
                 user.save()
-                res.cookie('jwt', refreshToken, {httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 })
+                res.cookie('jwt', refreshToken, {httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 })
                 res.json({
                     "message": "success",
                     "role": payload.role,
@@ -116,7 +116,7 @@ router.get('/logout', (req, res) => {
     // find if the refresh token exsit in the database
     User.findOne({"refreshToken":refreshToken}, (err, user) =>{
         if (!user) {
-            res.clearCookie('jwt', {httpOnly: true, sameSite: 'None', secure: true})
+            res.clearCookie('jwt', {httpOnly: true, sameSite: 'None'})
             return res.sendStatus(403)
         }           
         
@@ -125,7 +125,7 @@ router.get('/logout', (req, res) => {
             if (err) {
                 return res.status(400).json({message: err})
             } else {
-                res.clearCookie('jwt', {httpOnly:true, sameSite: 'None', secure: true})
+                res.clearCookie('jwt', {httpOnly:true, sameSite: 'None'})
                 return res.sendStatus(204)
             }
         })
@@ -144,7 +144,7 @@ router.put('/forgetPassword', (req, res) => {
             if (err) {
                 return res.status(400).json({message: err})
             } else {
-                return res.json({message: 'update the user successfully, please redirect to the reset router'})
+                return res.status(201).json({message: 'update the user successfully, please redirect to the reset router'})
             }
         })
     })
@@ -174,7 +174,7 @@ router.put('/resetPassword', (req, res) => {
                                 if (err) {
                                     return res.status(400).json({message: err})
                                 } else {
-                                    return res.json({message: 'Your password has been changed!'})
+                                    return res.status(201).json({message: 'Your password has been changed!'})
                                 }
                             })
                         })

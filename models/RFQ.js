@@ -40,10 +40,10 @@ const rfqSchema = new mongoose.Schema({
     status: {
         type: String
     },
-    stages: {
-        type: String
+    RFQstages: {
+        type: String,
+        default: "Initiated"
     }
-
 })
 
 module.exports = mongoose.model('RFQ', rfqSchema)
