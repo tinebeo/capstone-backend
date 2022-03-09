@@ -72,14 +72,5 @@ app.use('/files', (req, res, next) => {
     next()
 }, filesRouter);
 
-app.use('/', function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", '*');
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-    next();
-});
-
-
 //set the listen port and show the successful connect information
 app.listen(process.env.PORT, console.log(`Server is starting at ${PORT}`));
