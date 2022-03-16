@@ -33,6 +33,20 @@ router.get('/find', (req, res) => {
     })
 })
 
+// get specific RFQ given report number
+// give the middleware to permission
+router.get('/findOne', (req, res) => {
+    const rfqNumber = req.query.rfqNumber
+    RFQ.findOne({"rfqNumber":rfqNumber}).then((result) => {
+        if (!result) {
+            return res.status(404).send({message:"RFQ not found!!"})
+        }
+        return res.send(result)
+    }).catch((err) => {
+        console.log(err)
+    })
+})
+
 // create the new RFQ to MongoDB
 router.post('/add', (req, res) => {
     const rfq = new RFQ(req.query)

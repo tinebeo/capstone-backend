@@ -1,12 +1,13 @@
 const express = require('express')
 const User = require('../models/user')
+const Company = require('../models/company')
 const router = express.Router()
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
 //get data from MongoDB
 router.get('/', (req, res) => {
-    const posts = User.find({}, (err, posts) => {
+    Company.find({}, (err, posts) => {
         if(!err){
             res.json(posts)
         } else {
@@ -20,7 +21,7 @@ router.post('/register', (req, res)=>{
     const {userName, userEmail, password, role} = req.body
 
     // check the whether the user-email exists in database
-    User.findOne({userEmail: userEmail} ,(err , email) => {
+    User.findOne({"userEmail": userEmail} ,(err , email) => {
         if(email){
             res.send({message: "Email already exist!!"})
         } else {
