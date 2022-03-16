@@ -18,8 +18,7 @@ router.get('/', (req, res) => {
 })
 
 
-// get specific RFQ given report number
-// give the middleware to permission
+// get specific RFQs by given report number
 router.get('/find', (req, res) => {
     let query = RFQ.find()
     if (req.query.rfqNumber != null && req.query.rfqNumber != ''){
@@ -33,8 +32,7 @@ router.get('/find', (req, res) => {
     })
 })
 
-// get specific RFQ given report number
-// give the middleware to permission
+// get a specific RFQ by given report number
 router.get('/findOne', (req, res) => {
     const rfqNumber = req.query.rfqNumber
     RFQ.findOne({"rfqNumber":rfqNumber}).then((result) => {
