@@ -59,7 +59,6 @@ router.post('/add', (req, res) => {
         
         if (err) return res.json({err: err})
 
-        //rfq.rfqNumber = uuidv4() 
         const seqNumber = "00000" + counter.seqCounter
         //only work from 000001 to 999999
         rfq.rfqNumber = "RFQ-" + seqNumber.slice(-6)

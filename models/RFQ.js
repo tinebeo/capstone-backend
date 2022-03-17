@@ -14,6 +14,12 @@ const rfqSchema = new mongoose.Schema({
     user_id:{
         type: String
     },
+    to:{
+        type: String
+    },
+    from:{
+        type: String
+    },
     rfqDate:{
         type: Date,
         default: Date.now
