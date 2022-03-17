@@ -12,8 +12,7 @@ const rfqSchema = new mongoose.Schema({
         required: true
     },
     user_id:{
-        type: String,
-        required: true
+        type: String
     },
     rfqDate:{
         type: Date,
