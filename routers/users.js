@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken")
 
 //get data from MongoDB
 router.get('/', (req, res) => {
-    Company.find({}, (err, posts) => {
+    User.find({}, (err, posts) => {
         if(!err){
             res.json(posts)
         } else {
@@ -84,6 +84,7 @@ router.post('/login', (req, res) => {
 // refresh the user
 router.get('/refresh', (req, res) => {
     const cookies = req.cookies
+    console.log(cookies)
     if (!cookies?.jwt) return res.sendStatus(401)
     const refreshToken = cookies.jwt
     // find if the refresh token exsit in the database

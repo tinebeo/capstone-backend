@@ -48,6 +48,7 @@ router.get('/findOne', (req, res) => {
 // create the new RFQ to MongoDB
 router.post('/add', (req, res) => {
     const rfq = new RFQ(req.query)
+    console.log(rfq)
     Counter.findOneAndUpdate({seqName:"RFQ_Sequence"}, {$inc: {seqCounter: 1}}, function(err, counter) {
         if (!counter){
             const newCounter = new Counter({
@@ -61,7 +62,7 @@ router.post('/add', (req, res) => {
         //rfq.rfqNumber = uuidv4() 
         const seqNumber = "00000" + counter.seqCounter
         //only work from 000001 to 999999
-        rfq.rfqNumber = "RFQ-" + seqNumber.slice(-6) 
+        rfq.rfqNumber = "RFQ-" + seqNumber.slice(-6)
         rfq.save(err => {
             if(err){
                 res.send(err)

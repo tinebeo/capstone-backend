@@ -11,8 +11,7 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     user_id:{
-        type: String,
-        required: true
+        type: String
     },
     product_details : {
         regulatory_model_name: {
