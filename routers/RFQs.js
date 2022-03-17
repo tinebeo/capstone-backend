@@ -47,7 +47,7 @@ router.get('/findOne', (req, res) => {
 
 // create the new RFQ to MongoDB
 router.post('/add', (req, res) => {
-    const rfq = new RFQ(req.query)
+    const rfq = new RFQ(req.body)
     console.log(rfq)
     Counter.findOneAndUpdate({seqName:"RFQ_Sequence"}, {$inc: {seqCounter: 1}}, function(err, counter) {
         if (!counter){
