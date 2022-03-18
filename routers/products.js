@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 // get specific standard given a product_id
 router.get('/product', async (req, res) => {
 
-    const products = await Product.find({ "product_id": req.query.id.toLowerCase() })
+    const products = await Product.find({ "product_id": req.query.product_id.toLowerCase() })
         .then((result) => {
             return result
         })
@@ -55,7 +55,7 @@ router.get('/category', (req, res) => {
 
 // update a product given a product_id
 router.put('/update', (req, res) => {
-    Product.findOneAndUpdate({ "product_id": req.query.id }, req.body, { new: true })
+    Product.findOneAndUpdate({ "product_id": req.query.product_id}, req.body, { new: true })
         .then((result) => {
             res.status(200).send({ message: "Product updated successfully" })
         })
@@ -67,7 +67,7 @@ router.put('/update', (req, res) => {
 
 // delete a product given a product_id
 router.delete('/delete', (req, res) => {
-    Product.deleteOne({ "product_id": req.query.id })
+    Product.deleteOne({ "product_id": req.query.product_id })
         .then((result) => {
             res.status(200).send({ message: "Product deleted successfully" })
         })
