@@ -1,7 +1,6 @@
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://capstone-humber.netlify.app',
-  'https://humber-capstone-backend.herokuapp.com'
+  'https://capstone-humber.netlify.app'
 ]
 
 module.exports = allowedOrigins
