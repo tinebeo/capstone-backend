@@ -72,21 +72,26 @@ router.post('/add', (req, res) => {
     })
 })
 
-// delete the RFQ by given rfqNumber
-// router.delete('/delete', authUser, authDeleteRole, (req, res) => {
-//     try {
-//         RFQ.find({"rfqNumber":req.query.rfqNumber}).then((result) => {
-//             if (result.length == 0){
-//                 res.status(404).send({message: "The RFQ does not exist"})
-//                 return
-//             }
-//             RFQ.deleteOne({"rfqNumber":req.query.rfqNumber}).then(() => {
-//                 res.status(200).send({message: "The RFQ deleted successfully"})
-//             })
-//         })
-//     } catch (err) {
-//         res.send(err) 
-//     }
-// })
+//Update the RFQ by given rfqNumber
+router.put('/update', (req, res) => {
+    const rfqNumber = req.body.rfqNumber
+    const newRFQ = req.body
+    console.log(rfqNumber)
+    RFQ.findOneAndUpdate({"rfqNumber":rfqNumber}, newRFQ, {new: true})
+        .then(() => {
+            res.status(200).send({message:"RFQ updated successfully"})
+        }).catch(err => {
+            res.status(400).send({message:err})
+        })
+})
+
+//delete the RFQ by given rfqNumber
+router.delete('/delete', (req, res) => {
+    const rfqNumber = req.body.rfqNumber
+    RFQ.findOneAndDelete({"rfqNumber":rfqNumber}, (err) => {    
+        if(err) return res.status(400).send({message:err})
+        return res.status(201).send({message:"Successfully removed " +  rfqNumber})
+    })
+})
 
 module.exports = router

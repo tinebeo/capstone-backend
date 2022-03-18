@@ -47,6 +47,7 @@ const rfqSchema = new mongoose.Schema({
     },
     RFQstages: {
         type: String,
+        enum: ['Initiated', 'Processing', 'Completed', 'Cancelled'],
         default: "Initiated"
     }
 })
