@@ -69,7 +69,7 @@ router.put('/update', (req, res) => {
 router.delete('/delete', (req, res) => {
     Product.deleteOne({ "product_id": req.query.product_id })
         .then((result) => {
-            if (!result) 
+            if (result.deletedCount == 0) 
                 return res.status(404).send({ message: req.query.product_id + " cannot found the product!"})
             
             res.status(200).send({ message: "Product deleted successfully" })
