@@ -29,7 +29,7 @@ router.post('/register', (req, res)=>{
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(user.password, salt, (err, hash) => {
                     if (err) throw err
-                    user.password = hash    
+                    user.password = hash 
                     user.save(err => {
                         if(err){
                             res.send(err)
@@ -37,6 +37,7 @@ router.post('/register', (req, res)=>{
                             res.send({message:"Sucessfully Create"})
                         }
                     })
+                    console.log(user)
                 })
             })
         }
