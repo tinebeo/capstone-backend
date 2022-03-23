@@ -17,14 +17,14 @@ router.get('/', (req, res) => {
 
 // register new user
 router.post('/register', (req, res)=>{
-    const {userName, userEmail, password, role} = req.body
+    const {userName, userEmail, password} = req.body
 
     // check the whether the user-email exists in database
     User.findOne({"userEmail": userEmail} ,(err , email) => {
         if(email){
             res.send({message: "Email already exist!!"})
         } else {
-            const user = new User({userName, userEmail, password, role})
+            const user = new User({userName, userEmail, password})
             // encrypt the password 
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(user.password, salt, (err, hash) => {
