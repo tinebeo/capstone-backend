@@ -3,7 +3,6 @@ const RFQ = require('../models/RFQ')
 const Counter = require('../models/counter')
 const router = express.Router()
 const {authUser, authRWRole} = require('../permission/basicAuth')
-const { v4: uuidv4 } = require('uuid');
 const counter = require('../models/counter')
 
 // get all RFQs
@@ -78,7 +77,7 @@ router.put('/update', (req, res) => {
     const newRFQ = req.body
     RFQ.findOneAndUpdate({ "rfqNumber": rfqNumber}, newRFQ, { new: true })
         .then((result) => {
-            if (!result) return res.status(404).send({ message: rfqNumber + " cannot found the RFQ Number!"})    
+            if (!result) return res.status(404).send({ message: rfqNumber + " cannot found the RFQ Number!"})
             res.status(200).send({ message: rfqNumber + " has been updated successfully" })
         })
         .catch((err) => {
