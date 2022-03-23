@@ -76,11 +76,13 @@ router.post('/add', (req, res) => {
 router.put('/update', (req, res) => {
     const rfqNumber = req.query.rfqNumber
     const newRFQ = req.body
-    RFQ.findOneAndUpdate({"rfqNumber":rfqNumber}, newRFQ, {new: true})
-        .then(() => {
-            res.status(200).send({message: rfqNumber + " has been updated successfully!!"})
-        }).catch(err => {
-            res.status(400).send({message:err})
+    RFQ.findOneAndUpdate({ "rfqNumber": rfqNumber}, newRFQ, { new: true })
+        .then((result) => {
+            if (!result) return res.status(404).send({ message: rfqNumber + " cannot found the RFQ Number!"})    
+            res.status(200).send({ message: rfqNumber + " has been updated successfully" })
+        })
+        .catch((err) => {
+            res.status(400).send({ message: err })
         })
 })
 
