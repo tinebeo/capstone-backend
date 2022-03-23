@@ -21,7 +21,7 @@ const RFQsRouter = require('./routers/RFQs')
 const filesRouter = require('./routers/files')
 
 // middlewares
-const verifyJWT = require('./permission/verifyJWT.js')
+const verifyJWT = require('./permission/verifyJWT')
 const credentials = require('./permission/credentials')
 const corsOptions = require('./config/corsOptions')
 const cookieParser = require('cookie-parser')
