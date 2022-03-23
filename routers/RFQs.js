@@ -86,7 +86,7 @@ router.put('/update', (req, res) => {
 
 //delete the RFQ by given rfqNumber
 router.delete('/delete', (req, res) => {
-    const rfqNumber = req.body.rfqNumber
+    const rfqNumber = req.query.rfqNumber
     RFQ.findOneAndDelete({"rfqNumber":rfqNumber}, (err) => {    
         if(err) return res.status(400).send({message:err})
         return res.status(201).send({message:"Successfully removed " +  rfqNumber})
