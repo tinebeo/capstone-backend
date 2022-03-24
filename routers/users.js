@@ -189,7 +189,7 @@ router.put('/resetPassword', (req, res) => {
 })
 
 function generateAccessToken(payload) {
-    return jwt.sign(payload, process.env.secretOrKey_access, {expiresIn: '10s'})
+    return jwt.sign(payload, process.env.secretOrKey_access, {expiresIn: '10m'})
 }
 function generateRefreshToken(payload) {
     return jwt.sign(payload, process.env.secretOrKey_refresh, {expiresIn: '1d'})
