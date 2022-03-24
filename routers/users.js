@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
                 
                 user.refreshToken = refreshToken;
                 user.save()
-                res.cookie('jwt', refreshToken, {domain:"http://localhost:3000", httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 })
+                res.cookie('jwt', refreshToken, {httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 })
                 res.json({
                     "message": "success",
                     "role": payload.role,
