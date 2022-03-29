@@ -1,6 +1,7 @@
 const express = require('express')
 const RFQ = require('../models/RFQ')
 const Counter = require('../models/counter')
+const User = require('../models/user')
 const router = express.Router()
 const {authUser, authRWRole} = require('../permission/basicAuth')
 const counter = require('../models/counter')
@@ -41,6 +42,15 @@ router.get('/findOne', (req, res) => {
         return res.send(result)
     }).catch((err) => {
         console.log(err)
+    })
+})
+
+//get list of approvers for RFQ application
+router.get('/findApprovers', (req, res) => {
+    const appRole = ['Approver']
+    User.find({"role":{$in:appRole}}).select(["userName","role"]).exec(function (err, users){
+        if (!users) return res.status(404).send({message:"No approver has been found!"})
+        return res.status(200).send(users)
     })
 })
 

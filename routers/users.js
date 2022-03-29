@@ -188,6 +188,14 @@ router.put('/resetPassword', (req, res) => {
     })
 })
 
+// Change the role of user
+// router.put('/changeRole', (req, res) => {
+//     const newRole = req.body.role
+//     const changedUser = req.body.userEmail
+//     User.findOne({"userEmail": changedUser}, (err, ))
+// })
+
+
 function generateAccessToken(payload) {
     return jwt.sign(payload, process.env.secretOrKey_access, {expiresIn: '10m'})
 }
