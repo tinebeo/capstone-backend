@@ -4,7 +4,6 @@ const Counter = require('../models/counter')
 const User = require('../models/user')
 const router = express.Router()
 const {authUser, authRWRole} = require('../permission/basicAuth')
-const counter = require('../models/counter')
 
 // get all RFQs
 router.get('/', (req, res) => {
