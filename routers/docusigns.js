@@ -12,7 +12,9 @@ const RFQ = require('../models/RFQ')
 
 router.get('/', async (req, res) => {
 
-    res.status(200).send("Access granted. You can safely close this window and retry signing.")
+    // close the window after signing
+    res.status(200).send("<script>window.close();</script>")
+    //res.status(200).send("You can safely close this window and retry signing.")
 
 })
 
