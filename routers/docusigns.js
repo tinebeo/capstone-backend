@@ -62,10 +62,6 @@ router.get('/done', async (req, res) => {
             res.status(400).send({ message: err })
         })
 
-
-
-
-
 })
 
 router.get('/:envelopeId', async (req, res) => {

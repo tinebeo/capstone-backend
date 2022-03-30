@@ -7,6 +7,7 @@
 const fs = require("fs-extra");
 const docusign = require("docusign-esign");
 const open = require('open');
+const { exists } = require("./user");
 
 require("dotenv").config({ path: "./config/config.env" })
 
@@ -58,8 +59,9 @@ const getAccessToken = async (args) => {
                 // TODO handle reject
                 if (err.response.body.error == "consent_required") {
                     console.log("Consent required");
-                    console.log(consentUrl)
-                    open(consentUrl, { wait: true })
+                    return consentUrl
+                    //open(consentUrl, { wait: true })
+                    //process.exit(1)
                 }
             }
         })
@@ -80,8 +82,10 @@ const sendEnvelopeForEmbeddedSigning = async (args) => {
     // don't do anything if you dont have the access token
     if (!accessToken) {
         return
-    } else {
-        console.log(accessToken)
+    }
+    // consent url given, user permission is required
+    else if (accessToken.includes("account-d.docusign.com")) {
+        return { envelopeId: "", redirectUrl: accessToken }
     }
 
     // get user information
