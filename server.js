@@ -15,6 +15,7 @@ const indexRouter = require('./routers/index')
 const usersRouter = require('./routers/users')
 const companiesRouter = require('./routers/companies')
 const compliancesRouter = require('./routers/compliances')
+const docusignsRouter = require('./routers/docusigns')
 const standardsRouter = require('./routers/standards')
 const productsRouter = require('./routers/products')
 const RFQsRouter = require('./routers/RFQs')
@@ -63,6 +64,7 @@ app.use('/users', usersRouter);
 //app.use(verifyJWT);
 app.use('/companies', companiesRouter);
 app.use('/compliances', compliancesRouter);
+app.use('/docusigns', docusignsRouter);
 app.use('/standards', standardsRouter);
 app.use('/products', productsRouter);
 app.use('/RFQs', RFQsRouter);
