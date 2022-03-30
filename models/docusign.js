@@ -53,11 +53,12 @@ const getAccessToken = async (args) => {
             return res.body.access_token;
 
         }).catch((err) => {
-            console.log(err.response.body)
+            //console.log(err.response.body)
             if (err.response) {
                 // TODO handle reject
                 if (err.response.body.error == "consent_required") {
                     console.log("Consent required");
+                    console.log(consentUrl)
                     open(consentUrl, { wait: true })
                 }
             }
