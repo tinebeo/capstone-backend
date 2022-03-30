@@ -49,6 +49,9 @@ const rfqSchema = new mongoose.Schema({
         type: String,
         enum: ['Initiated', 'Processing', 'Completed', 'Cancelled'],
         default: "Initiated"
+    },
+    docusignEnvelopeId:{
+        type: String
     }
 })
 

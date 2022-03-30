@@ -121,7 +121,7 @@ const sendEnvelopeForEmbeddedSigning = async (args) => {
     console.log(`Envelope was created. EnvelopeId ${envelopeId}`);
 
     // Step 3. create the recipient view, the embedded signing
-    let viewRequest = makeRecipientViewRequest(args.envelopeArgs);
+    let viewRequest = makeRecipientViewRequest(args.envelopeArgs, envelopeId);
     // Call the CreateRecipientView API
     // Exceptions will be caught by the calling function
 
@@ -213,7 +213,7 @@ function makeEnvelope(args) {
     return env;
 }
 
-function makeRecipientViewRequest(args) {
+function makeRecipientViewRequest(args, envelopeId) {
     // Data for this method
     // args.dsReturnUrl
     // args.signerEmail
@@ -230,7 +230,7 @@ function makeRecipientViewRequest(args) {
     // the DocuSign signing. It's usually better to use
     // the session mechanism of your web framework. Query parameters
     // can be changed/spoofed very easily.
-    viewRequest.returnUrl = DOCUSIGN_RETURN_URL + "?rfq_number=" +args.rfqNumber;
+    viewRequest.returnUrl = DOCUSIGN_RETURN_URL + "?rfq_number=" +args.rfqNumber+"&envelope_id="+envelopeId;
 
     // How has your app authenticated the user? In addition to your app's
     // authentication, you can include authenticate steps from DocuSign.

@@ -54,7 +54,9 @@ router.get('/done', async (req, res) => {
     // TODO save envelope ID somehow 
 
     const rfqNumber = req.query.rfq_number
-    RFQ.findOneAndUpdate({ rfqNumber: rfqNumber }, { $set: { RFQstages: "Completed" } }, { new: true })
+    const envelopeId = req.query.envelope_id
+
+    RFQ.findOneAndUpdate({ rfqNumber: rfqNumber }, { $set: { RFQstages: "Completed", docusignEnvelopeId: envelopeId } }, { new: true })
         .then((result) => {
             if (!result) return res.status(404).send({ message: rfqNumber + " cannot found the RFQ Number!" })
             // close the window after signing
@@ -68,10 +70,6 @@ router.get('/done', async (req, res) => {
 
 router.get('/:envelopeId', async (req, res) => {
     // GET envelope document
-
-    console.log("get specific envelope")
-
-
     console.log(req.query.envelopeId)
     const args = {
         envelopeId: req.params.envelopeId
@@ -79,9 +77,11 @@ router.get('/:envelopeId', async (req, res) => {
 
     result = await getEnvelopeDocument(args)
 
-    var readstream = fs.readFileSync(result)
-    res.setHeader('Content-Type', 'application/pdf')
-    readstream.send(res)
+    res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Length': result.length
+    });
+    res.end(result, 'binary');
 })
 
 module.exports = router
