@@ -42,7 +42,6 @@ app.use(cookieParser())
 
 //connect to MongoDB by mongoose
 const mongoose = require('mongoose')
-const { default: Stripe } = require("stripe")
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
 })
