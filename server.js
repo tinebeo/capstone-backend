@@ -19,7 +19,9 @@ const docusignsRouter = require('./routers/docusigns')
 const standardsRouter = require('./routers/standards')
 const productsRouter = require('./routers/products')
 const RFQsRouter = require('./routers/RFQs')
+const paymentsRouter = require('./routers/payments')
 const filesRouter = require('./routers/files')
+
 
 // middlewares
 const verifyJWT = require('./permission/verifyJWT')
@@ -40,6 +42,7 @@ app.use(cookieParser())
 
 //connect to MongoDB by mongoose
 const mongoose = require('mongoose')
+const { default: Stripe } = require("stripe")
 mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
 })
@@ -68,11 +71,13 @@ app.use('/docusigns', docusignsRouter);
 app.use('/standards', standardsRouter);
 app.use('/products', productsRouter);
 app.use('/RFQs', RFQsRouter);
+app.use('/payments', paymentsRouter);
 app.use('/files', (req, res, next) => {
     req.gfs = gfs
     req.gridfsBucket = gridfsBucket
     next()
 }, filesRouter);
+
 
 //set the listen port and show the successful connect information
 app.listen(process.env.PORT, console.log(`Server is starting at ${PORT}`));

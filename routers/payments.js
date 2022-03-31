@@ -6,7 +6,7 @@ const stripeSecretKey = process.env.stripe_secretKey
 const Stripe = require('stripe')(stripeSecretKey)
 
 // get bundles from subscriber 
-router.post('/payment', async (req, res) => {
+router.post('/charge', async (req, res) => {
     const price = req.body.price
     const stripeId = req.body.id
     try {
@@ -26,3 +26,5 @@ router.post('/payment', async (req, res) => {
     }
 
 })
+
+module.exports = router
