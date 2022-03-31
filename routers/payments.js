@@ -7,7 +7,7 @@ const Stripe = require('stripe')(stripeSecretKey)
 
 // get bundles from subscriber 
 router.post('/charge', async (req, res) => {
-    const price = req.body.price
+    const price = req.body.amount
     const stripeId = req.body.id
     try {
         const payment = await Stripe.paymentIntents.create({
