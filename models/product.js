@@ -182,6 +182,9 @@ const productSchema = new mongoose.Schema({
         }],
         fuse_type: {
             type: String
+        },
+        fuse_marking: {
+            type: String
         }
     },
     compliance_report_number: [{
