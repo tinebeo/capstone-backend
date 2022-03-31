@@ -133,6 +133,9 @@ const productSchema = new mongoose.Schema({
         supply_connection: [{
             type: String
         }],
+        supply_connection_type: {
+            type: String
+        },
         mobility: [{
             type: String
         }]
