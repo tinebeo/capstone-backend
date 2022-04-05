@@ -6,6 +6,13 @@ const companySchema = new mongoose.Schema({
         default: 1,
         required: true
     },
+
+    // user group setting to allow admins to edit user groups
+    user_group_setting: {
+        type: Boolean,
+        default: false
+    },
+
     company_name: {
         type: String  
     },
