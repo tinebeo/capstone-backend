@@ -16,7 +16,7 @@ router.get('/:companyId', (req, res) => {
 // TODO: get users based on email address
 
 // update a user and tie it to a company
-router.put('/update/:companyId/:userId', (req, res) => {
+router.patch('/update/:companyId/:userId', (req, res) => {
 
     User.findOneAndUpdate(
         { _id: req.params.userId },
