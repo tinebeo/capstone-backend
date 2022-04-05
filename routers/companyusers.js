@@ -1,21 +1,10 @@
 const express = require('express')
-const CompanyUser = require('../models/companyuser')
+const User = require('../models/user')
 const router = express.Router()
 
-// get all companies and their users
-router.get('/', (req, res) => {
-    CompanyUser.find()
-        .then((result) => {
-            res.send(result)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-})
-
-// get a specific company and their users
+// get users of a specific company
 router.get('/:companyId', (req, res) => {
-    CompanyUser.find({company_id: req.params.companyId})
+    User.find({company_id: req.params.companyId})
         .then((result) => {
             res.send(result)
         })
@@ -24,11 +13,16 @@ router.get('/:companyId', (req, res) => {
         })
 })
 
-// add a company user
-router.post('/add', (req, res) => {
+// TODO: get users based on email address
 
-    const companyuser = new CompanyUser(req.body)
-    companyuser.save(companyuser)
+// update a user and tie it to a company
+router.put('/update/:companyId/:userId', (req, res) => {
+
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $set: { company_id: req.params.companyId } },
+        { new: true }
+    )
         .then((result) => {
             res.status(200).send({ message: "Success", result: result })
         })
@@ -41,7 +35,10 @@ router.post('/add', (req, res) => {
 // delete a company user
 router.delete('/delete/:companyId/:userId', (req, res) => {
 
-    CompanyUser.findOneAndRemove({ "company_id": req.params.companyId, "user_id": req.params.userId })
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { "company_id": null },
+        { new: true })
         .then((result) => {
             res.status(200).send({ message: "Success", result: result })
         })

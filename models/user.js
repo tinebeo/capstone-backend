@@ -6,6 +6,11 @@ const UserSchema = new mongoose.Schema({
         default: 1,
         required: true
     },
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'company',
+        required: true
+    },
     userName:{
         type: String,
         required: true
@@ -31,6 +36,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: ''
     }
+    
 })
 
 module.exports = mongoose.model('User', UserSchema)
