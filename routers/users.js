@@ -197,11 +197,21 @@ router.put('/resetPassword', (req, res) => {
 })
 
 // Change the role of user
-// router.put('/changeRole', (req, res) => {
-//     const newRole = req.body.role
-//     const changedUser = req.body.userEmail
-//     User.findOne({"userEmail": changedUser}, (err, ))
-// })
+router.put('/changeRole', (req, res) => {
+    const newRole = req.body.role
+    const changedUser = req.body.userEmail
+    User.findOne({"userEmail": changedUser}, (err, user) => {
+        if (!user) return res.status(404).json({message: "User is not found!?"})
+        if (err) return res.status(400).json({message: err})
+        user.updateOne({"role":newRole}, (err) => {
+            if (err) {
+                return res.status(400).json({message:err})
+            } else {
+                return res.status(200).json({message: 'Role has been changed!'})
+            }
+        })
+    })
+})
 
 
 function generateAccessToken(payload) {
