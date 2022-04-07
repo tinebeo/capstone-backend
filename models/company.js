@@ -25,16 +25,25 @@ const companySchema = new mongoose.Schema({
     company_email: {
         type: String,
     },
+    engineering_name: {
+        type: String,
+    },
     engineering_phone: {
         type: String,
     },
     engineering_email: {
         type: String,
     },
+    business_name: {
+        type: String,
+    },
     business_phone: {
         type: String,
     },
     business_email: {
+        type: String,
+    },
+    compliance_name: {
         type: String,
     },
     compliance_phone: {
