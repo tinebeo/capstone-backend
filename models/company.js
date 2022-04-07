@@ -16,41 +16,49 @@ const companySchema = new mongoose.Schema({
     company_name: {
         type: String  
     },
+    company_plan: {
+        type: [String],
+        enum: ['Standard', 'Professional', 'Enterprise', 'No Plan'],
+        default: ['No Plan']
+    },
     company_address: {
-        type: String,
+        type: String
+    },
+    company_country:{
+        type: String
     },
     company_phone: {
-        type: String,
+        type: String
     },
     company_email: {
-        type: String,
+        type: String
     },
     engineering_name: {
-        type: String,
+        type: String
     },
     engineering_phone: {
-        type: String,
+        type: String
     },
     engineering_email: {
-        type: String,
+        type: String
     },
     business_name: {
-        type: String,
+        type: String
     },
     business_phone: {
-        type: String,
+        type: String
     },
     business_email: {
-        type: String,
+        type: String
     },
     compliance_name: {
         type: String,
     },
     compliance_phone: {
-        type: String,
+        type: String
     },
     compliance_email: {
-        type: String,
+        type: String
     },
     users:[{
         type: mongoose.Schema.Types.ObjectId,
