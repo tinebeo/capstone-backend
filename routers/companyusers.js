@@ -1,11 +1,14 @@
 const express = require('express')
 const User = require('../models/user')
 const router = express.Router()
+const mongoose = require('mongoose');
 
 // get users of a specific company
-router.get('/:companyId', (req, res) => {
+router.get('/company/:companyId', (req, res) => {
+    
     User.find({company_id: req.params.companyId})
         .then((result) => {
+            console.log(result)
             res.send(result)
         })
         .catch((err) => {
@@ -14,13 +17,22 @@ router.get('/:companyId', (req, res) => {
 })
 
 // TODO: get users based on email address
+router.get('/email/:address', (req, res) => {
+    User.find({userEmail: {$regex: "@" + req.params.address + "."}})
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
 
 // update a user and tie it to a company
-router.patch('/update/:companyId/:userId', (req, res) => {
+router.post('/update/:companyId/:userId', (req, res) => {
 
     User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $set: { company_id: req.params.companyId } },
+        { $set: { company_id: mongoose.Types.ObjectId(req.params.companyId) } },
         { new: true }
     )
         .then((result) => {
