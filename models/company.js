@@ -24,6 +24,9 @@ const companySchema = new mongoose.Schema({
     company_address: {
         type: String
     },
+    company_domain: {
+        type: String
+    },
     company_country:{
         type: String
     },
