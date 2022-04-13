@@ -21,7 +21,7 @@ router.get('/dash', (req, res) => {
 router.get('/dash/geography', (req, res) => {
     Company.aggregate([
         { $group: {
-                _id:"$company_name", //will change to company_country
+                _id:"$company_country", //will change to company_country
                 count: { $sum: 1}
             }
         }
@@ -71,7 +71,6 @@ router.get('/dash/month_revenue', (req, res) => {
 })
 
 // get annually recurring revenue
-
 // get customer turnover
 
 
