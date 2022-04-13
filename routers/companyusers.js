@@ -14,6 +14,15 @@ router.get('/:companyId', (req, res) => {
 })
 
 // TODO: get users based on email address
+router.get('/email/:address', (req, res) => {
+    User.find({userEmail: {$regex: "@" + req.params.address + "."}})
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
 
 // update a user and tie it to a company
 router.patch('/update/:companyId/:userId', (req, res) => {
