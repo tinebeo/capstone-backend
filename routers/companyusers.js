@@ -1,11 +1,14 @@
 const express = require('express')
 const User = require('../models/user')
 const router = express.Router()
+const mongoose = require('mongoose');
 
 // get users of a specific company
 router.get('/company/:companyId', (req, res) => {
+    
     User.find({company_id: req.params.companyId})
         .then((result) => {
+            console.log(result)
             res.send(result)
         })
         .catch((err) => {
@@ -25,11 +28,11 @@ router.get('/email/:address', (req, res) => {
 })
 
 // update a user and tie it to a company
-router.patch('/update/:companyId/:userId', (req, res) => {
+router.post('/update/:companyId/:userId', (req, res) => {
 
     User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $set: { company_id: req.params.companyId } },
+        { $set: { company_id: mongoose.Types.ObjectId(req.params.companyId) } },
         { new: true }
     )
         .then((result) => {
