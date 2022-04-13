@@ -10,28 +10,36 @@ const Company = require('../models/company')
 router.post('/charge', async (req, res) => {
     const price = req.body.amount
     const stripeId = req.body.id
-    const companyID = req.body.companyid
+    const companyId = req.body.companyId
     const plan = req.body.plan
+    const today = new Date()
+    //const months = req.body.month
+    
 
     try {
-        const payment = await Stripe.paymentIntents.create({
-            amount: price,
-            currency: 'USD',
-            payment_method: stripeId,
-            confirm: true
+        //Charge the plan and update company data 
+        Company.findOne({"_id":companyId}, async (company) => {
+            if (!company) return res.status(404).send({message: "Company does not exist!?"})
+
+            const payment = await Stripe.paymentIntents.create({
+                amount: price,
+                currency: 'USD',
+                payment_method: stripeId,
+                confirm: true
+            })
+
+            console.log(payment)
+            
+            //const end_date = Date.now() + months * 30 * 24 * 60 * 60 * 1000
+            await Company.updateOne({"company_plan":plan, "payment":price, 
+                "Start_Date_of_Subscribption":today}, (err) => {
+                if (err) return res.status(400).send({message:err})
+
+                return res.status(200).send({message: "Successfully charged the fees."})
+            })
         })
-        console.log(payment)
-
-        //To-do the update company plan
-        //Company.findOne()
-
-        return res.status(200).send({message: "Successfully charged the fees."})
-
-
-
     } catch (error) {
-        
-        return res.status(500).send({message: "charge fail!"}, err)
+        return res.status(500).send({message: "charge fail!"}, error)
     }
 
 })

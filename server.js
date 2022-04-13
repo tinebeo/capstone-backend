@@ -21,6 +21,7 @@ const standardsRouter = require('./routers/standards')
 const productsRouter = require('./routers/products')
 const RFQsRouter = require('./routers/RFQs')
 const paymentsRouter = require('./routers/payments')
+const adminDashboardsRouter = require('./routers/admin_dashboards')
 const filesRouter = require('./routers/files')
 
 
@@ -73,6 +74,7 @@ app.use('/standards', standardsRouter);
 app.use('/products', productsRouter);
 app.use('/RFQs', RFQsRouter);
 app.use('/payments', paymentsRouter);
+app.use('/admin_dashboards', adminDashboardsRouter);
 app.use('/files', (req, res, next) => {
     req.gfs = gfs
     req.gridfsBucket = gridfsBucket

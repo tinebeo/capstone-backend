@@ -52,13 +52,25 @@ const companySchema = new mongoose.Schema({
         type: String
     },
     compliance_name: {
-        type: String,
+        type: String
     },
     compliance_phone: {
         type: String
     },
     compliance_email: {
         type: String
+    },
+    payment:{
+        type: Number
+    },
+    subscribed_month:{
+        type: Number
+    },
+    Start_Date_of_Subscribption:{
+        type: Date
+    },
+    End_Date_of_Subscribption:{
+        type: Date
     },
     users:[{
         type: mongoose.Schema.Types.ObjectId,
