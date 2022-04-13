@@ -3,7 +3,7 @@ const User = require('../models/user')
 const router = express.Router()
 
 // get users of a specific company
-router.get('/:companyId', (req, res) => {
+router.get('/company/:companyId', (req, res) => {
     User.find({company_id: req.params.companyId})
         .then((result) => {
             res.send(result)
