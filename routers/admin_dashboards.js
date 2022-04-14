@@ -37,7 +37,7 @@ router.get('/dash/avg_revenue', (req, res) => {
     Company.aggregate([
         { $group: {
                 _id: null,
-                totalPayment: {$sum: "payment"},
+                totalPayment: {$sum: "$payment"},
                 count: { $sum: 1}
             }
         }
@@ -51,27 +51,80 @@ router.get('/dash/avg_revenue', (req, res) => {
 // get monthly recurring revenue
 router.get('/dash/month_revenue', (req, res) => {
     const today = new Date()
-
-    Company.find({"End_Date_of_Subscribption":{"$gte": today}}).then((company) => {
-        company.aggregate([
-            { $group: {
-                    _id: null,
-                    totalPayment: {$sum: {$divide:["$payment", "$subscribed_month"]}},
-                    count: { $sum: 1}
-                }
+    Company.aggregate([
+        { $match: {
+                "End_Date_of_Subscribption":{"$gte": today}
             }
-        ]).then((result) => {
-            res.status(200).send(result)
-        }).catch((err) => {
-            res.status(400).send({message:err})
-        })
+        },
+        { $group: {
+                _id: null,
+                totalMonthlyRevenue: {$sum: {$divide:["$payment", "$subscribed_month"]}},
+                Active_member_count: { $sum: 1}
+            }
+        }
+    ]).then((result) => {
+        res.status(200).send(result)
     }).catch((err) => {
-        res.status(404).send({message:"No company is founded", result:0})
+        res.status(400).send({message:err})
     })
 })
 
 // get annually recurring revenue
-// get customer turnover
+router.get('/dash/annual_revenue', (req, res) => {
+    const this_year_first = new Date(new Date().getFullYear(), 0, 1)
+    const this_year_last = new Date(new Date().getFullYear()+1, 0, 1)
+    Company.aggregate([
+        { $match: {
+                "Start_Date_of_Subscribption":{"$gte": this_year_first, "$lte": this_year_last}
+            }
+        },
+        { $group: {
+                _id: null,
+                totalMonthlyRevenue: {$sum: {$divide:["$payment", "$subscribed_month"]}},
+                Active_member_count: { $sum: 1}
+            }
+        }
+    ]).then((result) => {
+        res.status(200).send(result)
+    }).catch((err) => {
+        res.status(400).send({message:err})
+    })
+})
 
+// get customer turnover
+router.get('/dash/cust_turnover', (req, res) => {
+    const this_year_first = new Date(new Date().getFullYear(), 0, 1)
+    const this_year_last = new Date(new Date().getFullYear()+1, 0, 1)
+    Company.aggregate([
+        { $facet : {
+            "unactive_member_count":[
+                { $match: {
+                    "Start_Date_of_Subscribption": {$not: {"$gte": this_year_first, "$lte": this_year_last}}
+                    }
+                },
+                { $group: {
+                        _id: null,
+                        No_Active_member_count: { $sum: 1}
+                    }
+                }
+            ],
+            "active_memebr_count_thisYear": [
+                { $match: {
+                    "Start_Date_of_Subscribption": {"$gte": this_year_first, "$lte": this_year_last}
+                    }
+                },
+                { $group: {
+                        _id: null,
+                        Active_member_count: { $sum: 1}
+                    }
+                }
+            ]}
+        }
+    ]).then((result) => {
+        res.status(200).send(result)
+    }).catch((err) => {
+        res.status(400).send({message:err})
+    })
+})
 
 module.exports = router

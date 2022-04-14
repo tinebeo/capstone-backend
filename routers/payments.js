@@ -34,8 +34,11 @@ router.post('/charge', async (req, res) => {
         const exist_payment = company.payment
         const total_payment = exist_payment + Number(price)
 
+        const exist_sub_month = company.subscribed_month
+        const total_sub_month = exist_sub_month + Number(months)
+
         //update the target company with new payment status
-        company.updateOne({"company_plan":plan, "payment":total_payment, 
+        company.updateOne({"company_plan":plan, "payment":total_payment, "subscribed_month":total_sub_month,
         "Start_Date_of_Subscribption":today, "End_Date_of_Subscribption": end_date}, (err) => {
             if (err) return res.status(400).send({message:err})
 
