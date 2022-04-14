@@ -52,7 +52,11 @@ const rfqSchema = new mongoose.Schema({
     },
     docusignEnvelopeId:{
         type: String
-    }
+    },
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'company',
+    },
 })
 
 module.exports = mongoose.model('RFQ', rfqSchema)

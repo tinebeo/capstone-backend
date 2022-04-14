@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
     user_id:{
         type: String
     },
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'company',
+    },
     product_details : {
         regulatory_model_name: {
             type: String,
