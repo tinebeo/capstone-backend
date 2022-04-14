@@ -21,7 +21,7 @@ router.get('/dash', (req, res) => {
 router.get('/dash/geography', (req, res) => {
     Company.aggregate([
         { $group: {
-                _id:"$company_country", //will change to company_country
+                _id:"$company_country",
                 count: { $sum: 1}
             }
         }
