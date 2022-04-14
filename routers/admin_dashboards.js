@@ -50,16 +50,11 @@ router.get('/dash/avg_revenue', (req, res) => {
 
 // get monthly recurring revenue
 router.get('/dash/month_revenue', (req, res) => {
-    const today = new Date()
     Company.aggregate([
-        { $match: {
-                "End_Date_of_Subscribption":{"$gte": today}
-            }
-        },
         { $group: {
-                _id: null,
-                totalMonthlyRevenue: {$sum: {$divide:["$payment", "$subscribed_month"]}},
-                Active_member_count: { $sum: 1}
+                _id: {$dateToString: {format: "%Y-%m", date: "$Start_Date_of_Subscribption" }},
+                totalMonthlyRevenue: {$sum: "$payment"},
+                member_count: { $sum: 1}
             }
         }
     ]).then((result) => {
@@ -71,17 +66,11 @@ router.get('/dash/month_revenue', (req, res) => {
 
 // get annually recurring revenue
 router.get('/dash/annual_revenue', (req, res) => {
-    const this_year_first = new Date(new Date().getFullYear(), 0, 1)
-    const this_year_last = new Date(new Date().getFullYear()+1, 0, 1)
     Company.aggregate([
-        { $match: {
-                "Start_Date_of_Subscribption":{"$gte": this_year_first, "$lte": this_year_last}
-            }
-        },
         { $group: {
-                _id: null,
-                totalMonthlyRevenue: {$sum: {$divide:["$payment", "$subscribed_month"]}},
-                Active_member_count: { $sum: 1}
+                _id: {$dateToString: {format: "%Y", date: "$Start_Date_of_Subscribption" }},
+                totalAnnualRevenue: {$sum: "$payment"},
+                member_count: { $sum: 1}
             }
         }
     ]).then((result) => {
@@ -91,7 +80,7 @@ router.get('/dash/annual_revenue', (req, res) => {
     })
 })
 
-// get customer turnover
+// get customer turnover yearly
 router.get('/dash/cust_turnover', (req, res) => {
     const this_year_first = new Date(new Date().getFullYear(), 0, 1)
     const this_year_last = new Date(new Date().getFullYear()+1, 0, 1)

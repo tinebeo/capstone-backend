@@ -66,6 +66,9 @@ const companySchema = new mongoose.Schema({
     payment:{
         type: Number
     },
+    total_payment:{
+        type: Number
+    },
     subscribed_month:{
         type: Number
     },
