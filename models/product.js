@@ -208,9 +208,11 @@ const productSchema = new mongoose.Schema({
       type: String,
     },
   },
-  compliance_report_number: {
-    type: String,
-  },
+  compliance_report_number: [
+    {
+      type: String,
+    },
+  ],
   is_compliant: {
     type: Boolean,
   },
