@@ -7,17 +7,36 @@ const Compliance = require('../models/compliance')
 const router = express.Router()
 const { v4: uuidv4 } = require('uuid');
 
-// get all products
-router.get('/', async (req, res) => {
-    const products = await Product.find()
-        .then((result) => {
-            return result
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+// auth
+const dataAuth = require('../permission/dataAuth');
 
-    res.send(await getIsCompliant(products, res))
+// get all products
+router.get('/', dataAuth, async (req, res) => {
+    
+    if (typeof req.user !== 'undefined') {
+        
+        const products = await Product.find({ company_id: req.user.companyId })
+            .then((result) => {
+                return result
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        res.send(await getIsCompliant(products, res))
+
+    } else {
+        
+        const products = await Product.find()
+            .then((result) => {
+                return result
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        res.send(await getIsCompliant(products, res))
+    }
+
+
 })
 
 // get specific standard given a product_id
@@ -55,7 +74,7 @@ router.get('/category', (req, res) => {
 
 // update a product given a product_id
 router.put('/update', (req, res) => {
-    Product.findOneAndUpdate({ "product_id": req.query.product_id}, req.body, { new: true })
+    Product.findOneAndUpdate({ "product_id": req.query.product_id }, req.body, { new: true })
         .then((result) => {
             res.status(200).send({ message: "Product updated successfully" })
         })
@@ -69,9 +88,9 @@ router.put('/update', (req, res) => {
 router.delete('/delete', (req, res) => {
     Product.deleteOne({ "product_id": req.query.product_id })
         .then((result) => {
-            if (result.deletedCount == 0) 
-                return res.status(404).send({ message: req.query.product_id + " cannot found the product!"})
-            
+            if (result.deletedCount == 0)
+                return res.status(404).send({ message: req.query.product_id + " cannot found the product!" })
+
             res.status(200).send({ message: "Product deleted successfully" })
         })
         .catch((err) => {
