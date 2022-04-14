@@ -53,9 +53,9 @@ function authApproveRole(req, res, next) {
 
 // check if the user has correct role to view the whole informatio of the app coding and database information
 function authSuperAdminRole(req, res, next) {
-    User.findOne({"userEmail":req.query.userEmail}, {"role":1}).then((result) =>{
+    User.findOne({"company_id":req.query.company_id}, {"role":1}).then((result) =>{
         const userRole = result.role
-        const allowRole = ['Super_Admin']
+        const allowRole = ['Approver']
         if (allowRole.indexOf(userRole) == -1) {
             res.status(401)
             return res.send({message:"require proper permission"})
@@ -63,7 +63,6 @@ function authSuperAdminRole(req, res, next) {
         next()
     })   
 }
-
 
 module.exports = {
     authUser, authRWRole, authDeleteRole, authApproveRole, authSuperAdminRole

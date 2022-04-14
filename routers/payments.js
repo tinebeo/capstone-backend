@@ -12,36 +12,44 @@ router.post('/charge', async (req, res) => {
     const stripeId = req.body.id
     const companyId = req.body.companyId
     const plan = req.body.plan
+    const months = req.query.month
+    const addedDays = months * 30
     const today = new Date()
-    //const months = req.body.month
+    const end_date = new Date().addDays(addedDays) 
     
 
-    try {
-        //Charge the plan and update company data 
-        Company.findOne({"_id":companyId}, async (company) => {
-            if (!company) return res.status(404).send({message: "Company does not exist!?"})
+    //Charge the plan and update company data 
+    Company.findById(companyId).then( (company, error) => {
+        if (!company) return res.status(404).send({message: "Company does not exist!?"})
 
-            const payment = await Stripe.paymentIntents.create({
-                amount: price,
-                currency: 'USD',
-                payment_method: stripeId,
-                confirm: true
-            })
-
-            console.log(payment)
-            
-            //const end_date = Date.now() + months * 30 * 24 * 60 * 60 * 1000
-            await Company.updateOne({"company_plan":plan, "payment":price, 
-                "Start_Date_of_Subscribption":today}, (err) => {
-                if (err) return res.status(400).send({message:err})
-
-                return res.status(200).send({message: "Successfully charged the fees."})
-            })
+        const payment = Stripe.paymentIntents.create({
+            amount: price,
+            currency: 'USD',
+            payment_method: stripeId,
+            confirm: true
         })
-    } catch (error) {
-        return res.status(500).send({message: "charge fail!"}, error)
-    }
 
+        console.log(payment)
+
+        const exist_payment = company.payment
+        const total_payment = exist_payment + Number(price)
+
+        //update the target company with new payment status
+        company.updateOne({"company_plan":plan, "payment":total_payment, 
+        "Start_Date_of_Subscribption":today, "End_Date_of_Subscribption": end_date}, (err) => {
+            if (err) return res.status(400).send({message:err})
+
+            return res.status(200).send({message: "Successfully charged the fees."})
+        })
+
+        return res.status(500).send({message: "charge fail!"}, error)
+    })
 })
+
+Date.prototype.addDays = function (days) {
+    const date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
 
 module.exports = router
