@@ -1,23 +1,19 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
     schema_version: {
         type: Number,
         default: 1,
-        required: true
+        required: true,
     },
     product_id: {
         type: String,
-        required: true
+        required: true,
     },
-    user_id:{
-        type: String
+    user_id: {
+        type: String,
     },
-    company_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'company',
-    },
-    product_details : {
+    product_details: {
         regulatory_model_name: {
             type: String,
         },
@@ -36,9 +32,11 @@ const productSchema = new mongoose.Schema({
         model_difference: {
             type: String,
         },
-        intended_environment: [{
-            type: String
-        }],
+        intended_environment: [
+            {
+                type: String,
+            },
+        ],
         applicable_standard: {
             type: String,
         },
@@ -50,17 +48,19 @@ const productSchema = new mongoose.Schema({
                 type: String,
             },
         },
-        manufacturer: [{
-            name: {
-                type: String,
-             },
-            address: {
-                type: String,
+        manufacturer: [
+            {
+                name: {
+                    type: String,
+                },
+                address: {
+                    type: String,
+                },
+                phone_number: {
+                    type: String,
+                },
             },
-            phone_number: {
-                type: String,
-            },
-        }],
+        ],
         trade_mark: {
             status: {
                 type: Boolean,
@@ -73,144 +73,164 @@ const productSchema = new mongoose.Schema({
         family_series_model: {
             type: Array,
         },
-        market: [{
-            continent_code: {
-                type: String,
+        market: [
+            {
+                continent_code: {
+                    type: String,
+                },
+                continent_name: {
+                    type: String,
+                },
+                country_code: {
+                    type: String,
+                },
+                country_name: {
+                    type: String,
+                },
             },
-            continent_name: {
-                type: String,
-            },
-            country_code: {
-                type: String,
-            },
-            country_name: {
-                type: String,
-            }
-        }]
+        ],
     },
     product_tech_details: {
         equipment_size: {
             width: {
-                type: Number
+                type: Number,
             },
             length: {
-                type: Number
+                type: Number,
             },
             height: {
-                type: Number
+                type: Number,
             },
             unit: {
-                type: String
+                type: String,
             },
         },
         equipment_weight: {
-            type: Number
+            type: Number,
         },
         power_rating: {
             voltage: {
-                type: Number
+                type: Number,
             },
             phase: {
-                type: Number
+                type: Number,
             },
             frequency: {
-                type: Number
+                type: Number,
             },
             power: {
-                type: Number
+                type: Number,
             },
             current: {
-                type: Number
-            }
+                type: Number,
+            },
         },
         operation_mode: {
             selected_mode: {
-                type: String
+                type: String,
             },
             ratio: {
-                type: Number
-            }
+                type: Number,
+            },
         },
-        use_classification: [{
-            type: String
-        }],
-        supply_connection: [{
-            type: String
-        }],
-        supply_connection_type: [{
-            type: String
-        }],
-        mobility: [{
-            type: String
-        }]
+        use_classification: [
+            {
+                type: String,
+            },
+        ],
+        supply_connection: [
+            {
+                type: String,
+            },
+        ],
+        supply_connection_type: [
+            {
+                type: String,
+            },
+        ],
+        mobility: [
+            {
+                type: String,
+            },
+        ],
     },
     product_env_details: {
         pollution_degree: {
-            type: String
+            type: String,
         },
         max_operating_ambient: {
-            type: Number
+            type: Number,
         },
         ingree_protection_classification: {
-            type: String
+            type: String,
         },
         operation_altitude: {
-            type: Number
+            type: Number,
         },
         equipment_mass: {
-            type: Number
+            type: Number,
         },
         relative_humidity: {
-            type: Number
+            type: Number,
         },
         atmospheric_pressure: {
-            type: Number
+            type: Number,
         },
         indoor_outdoor: {
-            type: String
-        }
+            type: String,
+        },
     },
     marking_and_doc: {
-        marking_plate:[{
-            name: {
-                type: String
+        marking_plate: [
+            {
+                name: {
+                    type: String,
+                },
+                file_location: {
+                    type: String,
+                },
             },
-            file_location: {
-                type: String
-            }
-        }],
-        warning_mark: [{
-            name: {
-                type: String
+        ],
+        warning_mark: [
+            {
+                name: {
+                    type: String,
+                },
+                file_location: {
+                    type: String,
+                },
             },
-            file_location: {
-                type: String
-            }
-        }],
+        ],
         fuse_type: {
-            type: String
+            type: String,
         },
         fuse_marking: {
-            type: String
-        }
+            type: String,
+        },
     },
-    compliance_report_number: [{
-        type: String
-    }],
+    compliance_report_number: [
+        {
+            type: String,
+        },
+    ],
     is_compliant: {
-        type: Boolean
+        type: Boolean,
+    },
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'company',
     },
     last_updated_status: {
         last_updated_by: {
-            type: String
+            type: String,
         },
         last_updated_date: {
-            type: Date
+            type: Date,
         },
         active_standard: {
-            type: String
-        }
-    }
-})
+            type: String,
+        },
+    },
+});
 
-module.exports = mongoose.model('Product', productSchema)
+module.exports = mongoose.model("Product", productSchema);
