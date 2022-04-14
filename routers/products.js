@@ -11,17 +11,30 @@ const { v4: uuidv4 } = require('uuid');
 const dataAuth = require('../permission/dataAuth');
 
 // get all products
-router.get('/', async (req, res) => {
+router.get('/', dataAuth, async (req, res) => {
+    
+    if (typeof req.user !== 'undefined') {
+        
+        const products = await Product.find({ company_id: req.user.companyId })
+            .then((result) => {
+                return result
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        res.send(await getIsCompliant(products, res))
 
-    const products = await Product.find()
-        .then((result) => {
-            return result
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    res.send(await getIsCompliant(products, res))
-
+    } else {
+        
+        const products = await Product.find()
+            .then((result) => {
+                return result
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        res.send(await getIsCompliant(products, res))
+    }
 
 
 })

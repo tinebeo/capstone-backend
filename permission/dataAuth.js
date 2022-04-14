@@ -12,17 +12,20 @@ module.exports = function (req, res, next) {
         /*return res
             .status(400)
             .json({ error: 'no token found, authorization denied' });*/
-            
-        // if there's no token, bypass for now
-        next();
-    }
 
-    try {
-        const decoded = jwt.verify(token, process.env.secretOrKey_access);
-        console.log("JWT decoded", decoded);
-        req.user = decoded; //if the use is not match, a error will be caught
+        // if there's no token, bypass for now
+        console.log("no token in auth")
         next();
-    } catch (err) {
-        return res.status(400).json({ error: err });
+
+    } else {
+
+        try {
+            const decoded = jwt.verify(token, process.env.secretOrKey_access);
+            console.log("JWT decoded", decoded);
+            req.user = decoded; //if the use is not match, a error will be caught
+            next();
+        } catch (err) {
+            return res.status(400).json({ error: err });
+        }
     }
 };
