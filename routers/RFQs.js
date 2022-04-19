@@ -16,7 +16,6 @@ router.get('/', dataAuth, (req, res) => {
                 res.send(result)
             })
             .catch((err) => {
-                s
                 console.log(err)
             })
     } else {
@@ -25,7 +24,6 @@ router.get('/', dataAuth, (req, res) => {
                 res.send(result)
             })
             .catch((err) => {
-                s
                 console.log(err)
             })
     }
@@ -62,7 +60,7 @@ router.get('/findOne', (req, res) => {
 router.get('/findApprovers', dataAuth, (req, res) => {
     const appRole = ['Approver']
     if (typeof req.user !== 'undefined') {
-
+        console.log(req.user)
         User.find({ "role": { $in: appRole }, company_id: req.user.companyId }).select(["userName", "role"]).exec(function (err, users) {
             if (!users) return res.status(404).send({ message: "No approver has been found!" })
             return res.status(200).send(users)
@@ -74,6 +72,23 @@ router.get('/findApprovers', dataAuth, (req, res) => {
             if (!users) return res.status(404).send({ message: "No approver has been found!" })
             return res.status(200).send(users)
         })
+    }
+})
+
+//get list of RFQs for the user
+router.get('/findUserRfqs', dataAuth, (req, res) => {
+    
+    if (typeof req.user !== 'undefined') {
+
+        // get rfqs for that user
+        RFQ.find({ authorizedPerson: req.user.userEmail })
+            .then((result) => {
+                res.send(result)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
     }
 })
 
