@@ -3,17 +3,30 @@ const RFQ = require('../models/RFQ')
 const Counter = require('../models/counter')
 const User = require('../models/user')
 const router = express.Router()
+
+// auth
 const {authApproveRole} = require('../permission/basicAuth')
+const dataAuth = require('../permission/dataAuth');
 
 // get all RFQs
-router.get('/', (req, res) => {
-    RFQ.find()
-        .then((result) => {
-            res.send(result)
-        })
-        .catch((err) => {s
-            console.log(err)
-        }) 
+router.get('/', dataAuth, (req, res) => {
+    if (typeof req.user !== 'undefined') {
+        RFQ.find({ company_id: req.user.companyId })
+            .then((result) => {
+                res.send(result)
+            })
+            .catch((err) => {s
+                console.log(err)
+            })  
+    } else {
+        RFQ.find()
+            .then((result) => {
+                res.send(result)
+            })
+            .catch((err) => {s
+                console.log(err)
+            }) 
+    }
 })
 
 
