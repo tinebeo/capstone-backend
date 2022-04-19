@@ -82,29 +82,34 @@ router.get('/dash/annual_revenue', (req, res) => {
 
 // get customer turnover yearly
 router.get('/dash/cust_turnover', (req, res) => {
-    const this_year_first = new Date(new Date().getFullYear(), 0, 1)
-    const this_year_last = new Date(new Date().getFullYear()+1, 0, 1)
+    const date = new Date()
+    const last_month_first = new Date(new Date().getFullYear(), date.getMonth()-1, 1)
+    const last_month_last = new Date(new Date().getFullYear(), date.getMonth(), 0)
+
+    const this_month_first = new Date(new Date().getFullYear(), date.getMonth(), 1)
+    const this_month_last = new Date(new Date().getFullYear(), date.getMonth()+1, 0)
+
     Company.aggregate([
         { $facet : {
-            "unactive_member_count":[
+            "lastMonth_member_count":[
                 { $match: {
-                    "Start_Date_of_Subscribption": {$not: {"$gte": this_year_first, "$lte": this_year_last}}
+                    "Start_Date_of_Subscribption": {"$gte": last_month_first, "$lte": last_month_last}
                     }
                 },
                 { $group: {
                         _id: null,
-                        No_Active_member_count: { $sum: 1}
+                        lastMonth_Active_member_count: { $sum: 1}
                     }
                 }
             ],
-            "active_memebr_count_thisYear": [
+            "thisMonth_memebr_count": [
                 { $match: {
-                    "Start_Date_of_Subscribption": {"$gte": this_year_first, "$lte": this_year_last}
+                    "Start_Date_of_Subscribption": {"$gte": this_month_first, "$lte": this_month_last}
                     }
                 },
                 { $group: {
                         _id: null,
-                        Active_member_count: { $sum: 1}
+                        thisMonth_Active_member_count: { $sum: 1}
                     }
                 }
             ]}
