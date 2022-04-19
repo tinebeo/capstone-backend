@@ -23,6 +23,12 @@ module.exports = function (req, res, next) {
             const decoded = jwt.verify(token, process.env.secretOrKey_access);
             console.log("JWT decoded", decoded);
             req.user = decoded; //if the use is not match, a error will be caught
+
+            // check if the user has a company set up. otherwise, return
+            if (typeof req.user.companyId === 'undefined') {
+                return res.status(403).json([]);
+            }
+
             next();
         } catch (err) {
             return res.status(400).json({ error: err });
