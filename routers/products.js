@@ -12,9 +12,9 @@ const dataAuth = require('../permission/dataAuth');
 
 // get all products
 router.get('/', dataAuth, async (req, res) => {
-    
+
     if (typeof req.user !== 'undefined') {
-        
+
         const products = await Product.find({ company_id: req.user.companyId })
             .then((result) => {
                 return result
@@ -25,7 +25,7 @@ router.get('/', dataAuth, async (req, res) => {
         res.send(await getIsCompliant(products, res))
 
     } else {
-        
+
         const products = await Product.find()
             .then((result) => {
                 return result
@@ -56,19 +56,34 @@ router.get('/product', async (req, res) => {
 // get products given a category and standard
 // path: products/category?id=<standard_category>&standard=<standard_body>
 // e.g., http://localhost:5000/products/category?id=MEAS&standard=IEC%2061010-031%3A2002
-router.get('/category', (req, res) => {
+router.get('/category', dataAuth, (req, res) => {
+    if (typeof req.user !== 'undefined') {
+        Product.find({
+            "product_details.product_category": req.query.id.toUpperCase(),
+            "product_details.applicable_standard": req.query.standard.toUpperCase(),
+            company_id: req.user.companyId
+        })
+            .then((result) => {
+                res.send(result)
+            })
+            .catch((err) => {
+                console.log(err)
+                res.status(400).send({ message: "Error getting product by standard" })
+            })
 
-    Product.find({
-        "product_details.product_category": req.query.id.toUpperCase(),
-        "product_details.applicable_standard": req.query.standard.toUpperCase()
-    })
-        .then((result) => {
-            res.send(result)
+    } else {
+        Product.find({
+            "product_details.product_category": req.query.id.toUpperCase(),
+            "product_details.applicable_standard": req.query.standard.toUpperCase()
         })
-        .catch((err) => {
-            console.log(err)
-            res.status(400).send({ message: "Error getting product by standard" })
-        })
+            .then((result) => {
+                res.send(result)
+            })
+            .catch((err) => {
+                console.log(err)
+                res.status(400).send({ message: "Error getting product by standard" })
+            })
+    }
 
 })
 

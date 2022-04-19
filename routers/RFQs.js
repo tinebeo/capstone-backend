@@ -29,7 +29,6 @@ router.get('/', dataAuth, (req, res) => {
     }
 })
 
-
 // get specific RFQs by given report number
 router.get('/find', (req, res) => {
     let query = RFQ.find()
@@ -67,8 +66,13 @@ router.get('/findApprovers', (req, res) => {
 })
 
 // create the new RFQ to MongoDB
-router.post('/add', (req, res) => {
+router.post('/add', dataAuth, (req, res) => {
     const rfq = new RFQ(req.body)
+
+    if (typeof req.user !== 'undefined') {
+        rfq.company_id = req.user.companyId
+    }
+
     console.log(rfq)
     Counter.findOneAndUpdate({seqName:"RFQ_Sequence"}, {$inc: {seqCounter: 1}}, function(err, counter) {
         if (!counter){
