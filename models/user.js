@@ -34,7 +34,12 @@ const UserSchema = new mongoose.Schema({
     resetLink:{
         type: String,
         default: ''
+    },
+    docusignClientId: {
+        type: String,
+        default: ''
     }
+
     
 })
 
