@@ -101,10 +101,15 @@ router.delete('/delete', (req, res) => {
 })
 
 // add a product
-router.post('/add', (req, res) => {
+router.post('/add', dataAuth, (req, res) => {
 
     const product = new Product(req.body)
     product.product_id = uuidv4()
+
+    if (typeof req.user !== 'undefined') {
+        product.company_id = req.user.companyId
+    }
+
     product.save(product)
         .then((result) => {
             res.status(200).send({ message: "Product added successfully" })
