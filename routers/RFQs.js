@@ -80,14 +80,24 @@ router.get('/findUserRfqs', dataAuth, (req, res) => {
 
     if (typeof req.user !== 'undefined') {
 
-        // get rfqs for that user
-        RFQ.find({ authorizedPerson: req.user.userEmail })
+        // get this users username
+        User.find({ userEmail: req.user.userEmail })
             .then((result) => {
-                res.send(result)
+                console.log(result.userName)
+                // get rfqs for that user
+                RFQ.find({ authorizedPerson: result.userName })
+                    .then((result) => {
+                        res.send(result)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             })
             .catch((err) => {
                 console.log(err)
             })
+
+
 
     }
 })
