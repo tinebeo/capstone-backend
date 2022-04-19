@@ -5,7 +5,7 @@ const User = require('../models/user')
 const router = express.Router()
 
 // auth
-const {authApproveRole} = require('../permission/basicAuth')
+const { authApproveRole } = require('../permission/basicAuth')
 const dataAuth = require('../permission/dataAuth');
 
 // get all RFQs
@@ -15,40 +15,42 @@ router.get('/', dataAuth, (req, res) => {
             .then((result) => {
                 res.send(result)
             })
-            .catch((err) => {s
+            .catch((err) => {
+                s
                 console.log(err)
-            })  
+            })
     } else {
         RFQ.find()
             .then((result) => {
                 res.send(result)
             })
-            .catch((err) => {s
+            .catch((err) => {
+                s
                 console.log(err)
-            }) 
+            })
     }
 })
 
 // get specific RFQs by given report number
 router.get('/find', (req, res) => {
     let query = RFQ.find()
-    if (req.query.rfqNumber != null && req.query.rfqNumber != ''){
+    if (req.query.rfqNumber != null && req.query.rfqNumber != '') {
         query = query.regex('rfqNumber', new RegExp(req.query.rfqNumber, 'i'))
     }
     query.exec().then((result) => {
         res.send(result)
     })
-    .catch((err) => {
-        console.log(err)
-    })
+        .catch((err) => {
+            console.log(err)
+        })
 })
 
 // get a specific RFQ by given report number
 router.get('/findOne', (req, res) => {
     const rfqNumber = req.query.rfqNumber
-    RFQ.findOne({"rfqNumber":rfqNumber}).then((result) => {
+    RFQ.findOne({ "rfqNumber": rfqNumber }).then((result) => {
         if (!result) {
-            return res.status(404).send({message:"RFQ not found!!"})
+            return res.status(404).send({ message: "RFQ not found!!" })
         }
         return res.send(result)
     }).catch((err) => {
@@ -57,12 +59,22 @@ router.get('/findOne', (req, res) => {
 })
 
 //get list of approvers for RFQ application
-router.get('/findApprovers', (req, res) => {
+router.get('/findApprovers', dataAuth, (req, res) => {
     const appRole = ['Approver']
-    User.find({"role":{$in:appRole}}).select(["userName","role"]).exec(function (err, users){
-        if (!users) return res.status(404).send({message:"No approver has been found!"})
-        return res.status(200).send(users)
-    })
+    if (typeof req.user !== 'undefined') {
+
+        User.find({ "role": { $in: appRole }, company_id: req.user.companyId }).select(["userName", "role"]).exec(function (err, users) {
+            if (!users) return res.status(404).send({ message: "No approver has been found!" })
+            return res.status(200).send(users)
+        })
+
+    } else {
+
+        User.find({ "role": { $in: appRole } }).select(["userName", "role"]).exec(function (err, users) {
+            if (!users) return res.status(404).send({ message: "No approver has been found!" })
+            return res.status(200).send(users)
+        })
+    }
 })
 
 // create the new RFQ to MongoDB
@@ -74,24 +86,24 @@ router.post('/add', dataAuth, (req, res) => {
     }
 
     console.log(rfq)
-    Counter.findOneAndUpdate({seqName:"RFQ_Sequence"}, {$inc: {seqCounter: 1}}, function(err, counter) {
-        if (!counter){
+    Counter.findOneAndUpdate({ seqName: "RFQ_Sequence" }, { $inc: { seqCounter: 1 } }, function (err, counter) {
+        if (!counter) {
             const newCounter = new Counter({
-                seqName:"RFQ_Sequence"
+                seqName: "RFQ_Sequence"
             })
             newCounter.save()
         }
-        
-        if (err) return res.json({err: err})
+
+        if (err) return res.json({ err: err })
 
         const seqNumber = "00000" + counter.seqCounter
         //only work from 000001 to 999999
         rfq.rfqNumber = "RFQ-" + seqNumber.slice(-6)
         rfq.save(err => {
-            if(err){
+            if (err) {
                 res.send(err)
             } else {
-                res.send({message:"Sucessfully Submitted"})
+                res.send({ message: "Sucessfully Submitted" })
             }
         })
     })
@@ -101,9 +113,9 @@ router.post('/add', dataAuth, (req, res) => {
 router.put('/update', (req, res) => {
     const rfqNumber = req.query.rfqNumber
     const newRFQ = req.body
-    RFQ.findOneAndUpdate({ "rfqNumber": rfqNumber}, newRFQ, { new: true })
+    RFQ.findOneAndUpdate({ "rfqNumber": rfqNumber }, newRFQ, { new: true })
         .then((result) => {
-            if (!result) return res.status(404).send({ message: rfqNumber + " cannot found the RFQ Number!"})
+            if (!result) return res.status(404).send({ message: rfqNumber + " cannot found the RFQ Number!" })
             res.status(200).send({ message: rfqNumber + " has been updated successfully" })
         })
         .catch((err) => {
@@ -114,9 +126,9 @@ router.put('/update', (req, res) => {
 //delete the RFQ by given rfqNumber
 router.delete('/delete', (req, res) => {
     const rfqNumber = req.query.rfqNumber
-    RFQ.findOneAndDelete({"rfqNumber":rfqNumber}, (err) => {    
-        if(err) return res.status(400).send({message:err})
-        return res.status(201).send({message:"Successfully removed " +  rfqNumber})
+    RFQ.findOneAndDelete({ "rfqNumber": rfqNumber }, (err) => {
+        if (err) return res.status(400).send({ message: err })
+        return res.status(201).send({ message: "Successfully removed " + rfqNumber })
     })
 })
 
