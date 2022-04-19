@@ -60,6 +60,7 @@ router.post('/login', (req, res) => {
                     userEmail: user.userEmail,
                     role: user.role,
                     companyId: user.company_id,
+                    docusignClientId: user.docusignClientId,
                     userId: user._id
                 }
 
@@ -75,6 +76,7 @@ router.post('/login', (req, res) => {
                     "role": payload.role,
                     "companyId": payload.companyId,
                     "userId": payload.userId,
+                    "docusignClientId": payload.docusignClientId,
                     "accessToken": accessToken
                 })
             } else {
@@ -101,6 +103,7 @@ router.get('/refresh', (req, res) => {
                 userEmail: decoded.userEmail,
                 role: decoded.role,
                 companyId: decoded.companyId,
+                docusignClientId: decoded.docusignClientId,
                 userId: decoded._id
             }
             const accessToken = generateAccessToken(payload)
@@ -109,6 +112,7 @@ router.get('/refresh', (req, res) => {
                 "role": payload.role,
                 "companyId": payload.companyId,
                 "userId": payload.userId,
+                "docusignClientId": payload.docusignClientId,
                 "accessToken": accessToken
             })
         })
