@@ -8,14 +8,17 @@ const Company = require('../models/company')
 
 // get bundles from subscriber 
 router.post('/charge', async (req, res) => {
-    const price = req.body.amount
-    const stripeId = req.body.id
-    const companyId = req.body.companyId
-    const plan = req.body.plan
-    const months = req.body.month
+    const price = req.query.amount
+    const stripeId = req.query.id
+    const companyId = req.query.companyId
+    const plan = req.query.plan
+    const months = req.query.month
     const addedDays = months * 30
     const today = new Date()
     const end_date = new Date().addDays(addedDays) 
+
+    
+    console.log(req)
 
     //Charge the plan and update company data 
     Company.findById(companyId).then( (company, error) => {
