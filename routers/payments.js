@@ -10,18 +10,9 @@ const Company = require('../models/company')
 router.post('/charge', async (req, res) => {
     const price = req.body.amount
     const stripeId = req.body.id
-    // const companyId = req.body.companyId
-    // const plan = req.body.plan
-    // const months = req.query.month
-    // const addedDays = months * 30
-    // const today = new Date()
-    // const end_date = new Date().addDays(addedDays) 
 
-    //Charge the plan and update company data 
-    // Company.findById(companyId).then( (company, error) => {
-    //     if (!company) return res.status(404).send({message: "Company does not exist!?"})
-
-        const payment = Stripe.paymentIntents.create({
+    try {
+        const payment = await Stripe.paymentIntents.create({
             amount: price,
             currency: 'USD',
             payment_method: stripeId,
@@ -30,23 +21,48 @@ router.post('/charge', async (req, res) => {
 
         console.log(payment)
 
-        // const exist_payment = company.total_payment
-        // const total_payment = exist_payment + Number(price)
+        return res.status(200).send({message: "Successfully charged the fees."})
 
-        // const exist_sub_month = company.subscribed_month
-        // const total_sub_month = exist_sub_month + Number(months)"subscribed_month":total_sub_month,"End_Date_of_Subscribption": end_date
+    } catch (err) {
+
+        return res.status(400).send({message: err.message})
+    
+    }
+})
+
+// update the latest status for the subscriber 
+router.put('/updateCompany', async (req, res) => {
+    const price = req.query.amount
+    const companyId = req.query.companyId
+    const plan = req.query.plan
+    const months = req.query.month
+    const addedDays = months * 30
+    const today = new Date()
+    const end_date = new Date().addDays(addedDays) 
+
+    //Charge the plan and update company data 
+    Company.findById(companyId).then( (company, error) => {
+        if (!company) return res.status(404).send({message: "Company does not exist!?"})
+
+        const exist_payment = company.total_payment
+        const total_payment = exist_payment + Number(price)
+
+        const exist_sub_month = company.subscribed_month
+        const total_sub_month = exist_sub_month + Number(months)
 
         //update the target company with new payment status
-        // company.updateOne({"company_plan":plan, "payment":price, "total_payment":total_payment, 
-        // "Start_Date_of_Subscribption":today}, (err) => {
-        //     if (err) return res.status(400).send({message:err})
+        company.updateOne({"company_plan":plan, "payment":price, "total_payment":total_payment, "subscribed_month":total_sub_month,
+        "End_Date_of_Subscribption": end_date, "Start_Date_of_Subscribption":today}, (err) => {
+           
+            if (err) return res.status(400).send({message:err})
 
-            return res.status(200).send({message: "Successfully charged the fees."})
-        // })
+            return res.status(200).send({message: "Update success!"})
 
-        // return res.status(500).send({message: "charge fail!"}, error)
-    // })
+        })
+    })
 })
+
+
 
 Date.prototype.addDays = function (days) {
     const date = new Date(this.valueOf());
