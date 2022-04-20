@@ -67,10 +67,12 @@ const companySchema = new mongoose.Schema({
         type: Number
     },
     total_payment:{
-        type: Number
+        type: Number,
+        default: 0
     },
     subscribed_month:{
-        type: Number
+        type: Number,
+        default: 0
     },
     Start_Date_of_Subscribption:{
         type: Date
