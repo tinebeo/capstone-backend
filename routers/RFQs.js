@@ -85,7 +85,7 @@ router.get('/findUserRfqs', dataAuth, (req, res) => {
             .then((result) => {
                 console.log(result)
                 // get rfqs for that user
-                RFQ.find({ approver: { $regex: String(result[0].userName) } })
+                RFQ.find({ approver: { $eq: String(result[0].userName) } })
                     .then((result) => {
                         console.log(result)
                         res.send(result)
