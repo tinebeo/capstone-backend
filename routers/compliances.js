@@ -2,6 +2,7 @@ const express = require('express')
 const Compliance = require('../models/compliance')
 const router = express.Router()
 const {authUser, authRWRole, authDeleteRole} = require('../permission/basicAuth')
+const Counter = require('../models/counter')
 
 // auth
 const dataAuth = require('../permission/dataAuth');
@@ -41,14 +42,22 @@ router.post('/add', dataAuth, (req, res) => {
     if (typeof req.user !== 'undefined') {
         compliance.company_id = req.user.companyId
     }
-    
-    compliance.save(err => {
-        if(err){
-            res.send(err)
-        } else {
-            res.send({message:"Sucessfully Create"})
-        }
+
+    Counter.findOneAndUpdate({ seqName: "Compliance_Sequence" }, { $inc: { seqCounter: 1 } }, function (err, counter) {
+        if (err) return res.json({ err: err })
+
+        compliance.report_number = "COMPLIANCE-" + counter.seqCounter
+
+        compliance.save(err => {
+            if(err){
+                res.send(err)
+            } else {
+                res.send({message:"Sucessfully Create"})
+            }
+        })
     })
+    
+    
 })
 
 // delete complinaces by given report_numbers
