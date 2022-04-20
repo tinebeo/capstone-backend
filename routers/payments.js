@@ -13,7 +13,7 @@ router.post('/charge', async (req, res) => {
     const companyId = req.body.companyId
     const plan = req.body.plan
     //const months = req.query.month
-    const addedDays = months * 30
+    //const addedDays = months * 30
     const today = new Date()
     const end_date = new Date().addDays(addedDays) 
 
