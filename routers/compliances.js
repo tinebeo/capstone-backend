@@ -35,7 +35,7 @@ router.get('/', dataAuth, (req, res) => {
 // get specific compliance given report number
 // give the middleware to permission
 // path: compliances/report?report_number=<report_number>
-router.get('/find', authUser, (req, res) => {
+router.get('/find', (req, res) => {
     let query = Compliance.find()
     if (req.query.report_number != null && req.query.report_number != '') {
         query = query.regex('report_number', new RegExp(req.query.report_number, 'i'))
