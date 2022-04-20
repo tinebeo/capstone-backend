@@ -10,7 +10,7 @@ const dataAuth = require('../permission/dataAuth');
 
 // get all RFQs
 router.get('/', dataAuth, (req, res) => {
-    if (typeof req.user !== 'undefined') {
+    if (typeof req.user !== 'undefined' && !req.user.role.includes("Super_Admin")) {
         RFQ.find({ company_id: req.user.companyId })
             .then((result) => {
                 res.send(result)
