@@ -78,7 +78,8 @@ const companySchema = new mongoose.Schema({
         type: Date
     },
     End_Date_of_Subscribption:{
-        type: Date
+        type: Date,
+        default: "1970-01-01T00:00:00.000Z" 
     },
     users:[{
         type: mongoose.Schema.Types.ObjectId,
