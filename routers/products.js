@@ -13,8 +13,10 @@ const dataAuth = require('../permission/dataAuth');
 // get all products
 router.get('/', dataAuth, async (req, res) => {
 
-    if (typeof req.user !== 'undefined') {
+    console.log(req.user )
 
+    // if super admin, dont load by company
+    if (typeof req.user !== 'undefined' && !req.user.role.includes("Super_Admin")) {
         const products = await Product.find({ company_id: req.user.companyId })
             .then((result) => {
                 return result
@@ -57,7 +59,7 @@ router.get('/product', async (req, res) => {
 // path: products/category?id=<standard_category>&standard=<standard_body>
 // e.g., http://localhost:5000/products/category?id=MEAS&standard=IEC%2061010-031%3A2002
 router.get('/category', dataAuth, (req, res) => {
-    if (typeof req.user !== 'undefined') {
+    if (typeof req.user !== 'undefined' && !req.user.role.includes("Super_Admin")) {
         Product.find({
             "product_details.product_category": req.query.id.toUpperCase(),
             "product_details.applicable_standard": req.query.standard.toUpperCase(),
