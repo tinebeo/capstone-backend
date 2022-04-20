@@ -139,8 +139,8 @@ router.post('/add', dataAuth, (req, res) => {
 // updates the is_compliant attribute in product
 async function getIsCompliant(products, res) {
     const validCompliances = await Compliance.find({
-        start_date: { $gt: new Date() },
-        end_date: { $lt: new Date() },
+        start_date: { $lt: new Date() },
+        end_date: { $gt: new Date() },
 
     }).then((result) => {
         return result.map((c) => c.report_number)
