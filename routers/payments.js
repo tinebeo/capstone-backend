@@ -12,11 +12,10 @@ router.post('/charge', async (req, res) => {
     const stripeId = req.body.id
     const companyId = req.body.companyId
     const plan = req.body.plan
-    const months = req.query.month
+    const months = req.body.month
     const addedDays = months * 30
     const today = new Date()
     const end_date = new Date().addDays(addedDays) 
-    
 
     //Charge the plan and update company data 
     Company.findById(companyId).then( (company, error) => {
