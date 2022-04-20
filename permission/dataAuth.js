@@ -25,7 +25,7 @@ module.exports = function (req, res, next) {
             req.user = decoded; //if the use is not match, a error will be caught
 
             // check if the user has a company set up. otherwise, return
-            if (typeof req.user.companyId === 'undefined') {
+            if (typeof req.user.companyId === 'undefined' || req.user.companyId == null) {
                 return res.status(403).json([]);
             }
 
