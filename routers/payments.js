@@ -8,17 +8,14 @@ const Company = require('../models/company')
 
 // get bundles from subscriber 
 router.post('/charge', async (req, res) => {
-    const price = req.query.amount
-    const stripeId = req.query.id
-    const companyId = req.query.companyId
-    const plan = req.query.plan
-    const months = req.query.month
+    const price = req.body.amount
+    const stripeId = req.body.id
+    const companyId = req.body.companyId
+    const plan = req.body.plan
+    //const months = req.query.month
     const addedDays = months * 30
     const today = new Date()
     const end_date = new Date().addDays(addedDays) 
-
-    
-    console.log(req)
 
     //Charge the plan and update company data 
     Company.findById(companyId).then( (company, error) => {
@@ -36,12 +33,12 @@ router.post('/charge', async (req, res) => {
         const exist_payment = company.total_payment
         const total_payment = exist_payment + Number(price)
 
-        const exist_sub_month = company.subscribed_month
-        const total_sub_month = exist_sub_month + Number(months)
+        // const exist_sub_month = company.subscribed_month
+        // const total_sub_month = exist_sub_month + Number(months)"subscribed_month":total_sub_month,
 
         //update the target company with new payment status
         company.updateOne({"company_plan":plan, "payment":price, "total_payment":total_payment, 
-        "subscribed_month":total_sub_month,"Start_Date_of_Subscribption":today, 
+        "Start_Date_of_Subscribption":today, 
         "End_Date_of_Subscribption": end_date}, (err) => {
             if (err) return res.status(400).send({message:err})
 
