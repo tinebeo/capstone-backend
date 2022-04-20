@@ -84,6 +84,8 @@ router.post('/login', (req, res) => {
 
                     if (!company){
                         sub_status += "not belong to any company"
+                    } else if (!end_subscribed_date) {
+                        sub_status += "no plan for this company"
                     } else if (today > end_subscribed_date) {
                         sub_status += "expired"
                     } else {
@@ -99,7 +101,7 @@ router.post('/login', (req, res) => {
                         "docusignClientId": payload.docusignClientId,
                         "accessToken": accessToken
                     })
-                 })
+                })
             } else {
                 return res.status(400).send({ message: "password incorrect" })
             }
@@ -128,13 +130,34 @@ router.get('/refresh', (req, res) => {
                 userId: decoded._id
             }
             const accessToken = generateAccessToken(payload)
-            res.json({
-                "message": "success",
-                "role": payload.role,
-                "companyId": payload.companyId,
-                "userId": payload.userId,
-                "docusignClientId": payload.docusignClientId,
-                "accessToken": accessToken
+
+            const company_id = user.company_id
+
+            Company.findOne({"_id":company_id}, (err, company) => {
+
+                const end_subscribed_date = company.End_Date_of_Subscribption
+                const today = new Date()
+                var sub_status = ""
+
+                if (!company){
+                    sub_status += "not belong to any company"
+                } else if (!end_subscribed_date) {
+                    sub_status += "no plan for this company"
+                } else if (today > end_subscribed_date) {
+                    sub_status += "expired"
+                } else {
+                    sub_status += "alive"
+                }
+
+                res.json({
+                    "message": "success",
+                    "role": payload.role,
+                    "companyId": payload.companyId,
+                    "userId": payload.userId,
+                    "subscriptionStatus":sub_status,
+                    "docusignClientId": payload.docusignClientId,
+                    "accessToken": accessToken
+                })
             })
         })
     })
