@@ -32,10 +32,10 @@ router.post('/charge', async (req, res) => {
 
 // update the latest status for the subscriber 
 router.put('/updateCompany', async (req, res) => {
-    const price = req.query.amount
-    const companyId = req.query.companyId
-    const plan = req.query.plan
-    const months = req.query.month
+    const price = req.body.amount
+    const companyId = req.body.companyId
+    const plan = req.body.plan
+    const months = req.body.month
     const addedDays = months * 30
     const today = new Date()
     const end_date = new Date().addDays(addedDays) 
