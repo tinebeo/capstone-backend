@@ -10,7 +10,7 @@ const dataAuth = require('../permission/dataAuth');
 // get all compliances
 router.get('/', dataAuth, (req, res) => {
 
-    if (typeof req.user !== 'undefined') {
+    if (typeof req.user !== 'undefined' && !req.user.role.includes("Super_Admin")) {
         Compliance.find({ company_id: req.user.companyId })
             .then((result) => {
                 res.send(result)
