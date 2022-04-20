@@ -57,7 +57,11 @@ const complianceSchema = new mongoose.Schema({
         continent_code: {
             type: String,
         },
-    }
+    },
+    company_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'company',
+    },
 })
 
 module.exports = mongoose.model('Compliance', complianceSchema)

@@ -37,6 +37,11 @@ router.get('/find', authUser, (req, res) => {
 // create the new complinace to MongoDB
 router.post('/add', dataAuth, (req, res) => {
     const compliance = new Compliance(req.body)
+
+    if (typeof req.user !== 'undefined') {
+        compliance.company_id = req.user.companyId
+    }
+    
     compliance.save(err => {
         if(err){
             res.send(err)
