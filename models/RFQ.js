@@ -30,7 +30,7 @@ const rfqSchema = new mongoose.Schema({
     quoteRequiredBy:{
         type: String
     },
-    authorizedPerson:{
+    approver:{
         type: String
     },
     description:{
