@@ -91,17 +91,18 @@ router.post('/login', (req, res) => {
                     } else {
                         sub_status += "alive"
                     }
-
-                    res.json({
-                        "message": "success",
-                        "role": payload.role,
-                        "companyId": payload.companyId,
-                        "userId": payload.userId,
-                        "subscriptionStatus":sub_status,
-                        "docusignClientId": payload.docusignClientId,
-                        "accessToken": accessToken
-                    })
                 })
+
+                res.json({
+                    "message": "success",
+                    "role": payload.role,
+                    "companyId": payload.companyId,
+                    "userId": payload.userId,
+                    "subscriptionStatus":sub_status,
+                    "docusignClientId": payload.docusignClientId,
+                    "accessToken": accessToken
+                })
+
             } else {
                 return res.status(400).send({ message: "password incorrect" })
             }
@@ -148,17 +149,18 @@ router.get('/refresh', (req, res) => {
                 } else {
                     sub_status += "alive"
                 }
-
-                res.json({
-                    "message": "success",
-                    "role": payload.role,
-                    "companyId": payload.companyId,
-                    "userId": payload.userId,
-                    "subscriptionStatus":sub_status,
-                    "docusignClientId": payload.docusignClientId,
-                    "accessToken": accessToken
-                })
             })
+            
+            res.json({
+                "message": "success",
+                "role": payload.role,
+                "companyId": payload.companyId,
+                "userId": payload.userId,
+                "subscriptionStatus":sub_status,
+                "docusignClientId": payload.docusignClientId,
+                "accessToken": accessToken
+            })
+            
         })
     })
 })
