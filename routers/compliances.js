@@ -3,6 +3,9 @@ const Compliance = require('../models/compliance')
 const router = express.Router()
 const {authUser, authRWRole, authDeleteRole} = require('../permission/basicAuth')
 
+// auth
+const dataAuth = require('../permission/dataAuth');
+
 // get all compliances
 router.get('/', (req, res) => {
     Compliance.find()
@@ -32,16 +35,8 @@ router.get('/find', authUser, (req, res) => {
 })
 
 // create the new complinace to MongoDB
-router.post('/add', authRWRole, (req, res) => {
-    const compliance = new Compliance({
-        "report_number": req.query.report_number,
-        "record_type": {
-            "type": req.query.type,
-            "record_detail":req.query.record_detail
-        },
-        "issued_date": req.query.issued_date,
-        "expiry_date": req.query.expiry_date
-    })
+router.post('/add', dataAuth, (req, res) => {
+    const compliance = new Compliance(req.body)
     compliance.save(err => {
         if(err){
             res.send(err)
