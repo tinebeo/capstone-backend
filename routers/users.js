@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const Company = require('../models/company')
 const router = express.Router()
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
@@ -71,14 +72,34 @@ router.post('/login', (req, res) => {
                 user.refreshToken = refreshToken;
                 user.save()
                 res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 })
-                res.json({
-                    "message": "success",
-                    "role": payload.role,
-                    "companyId": payload.companyId,
-                    "userId": payload.userId,
-                    "docusignClientId": payload.docusignClientId,
-                    "accessToken": accessToken
-                })
+
+                // find the end_subscribed_date if expired or alive
+                const company_id = user.company_id
+
+                Company.findOne({"_id":company_id}, (err, company) => {
+
+                    const end_subscribed_date = company.End_Date_of_Subscribption
+                    const today = new Date()
+                    var sub_status = ""
+
+                    if (!company){
+                        sub_status += "not belong to any company"
+                    } else if (today > end_subscribed_date) {
+                        sub_status += "expired"
+                    } else {
+                        sub_status += "alive"
+                    }
+
+                    res.json({
+                        "message": "success",
+                        "role": payload.role,
+                        "companyId": payload.companyId,
+                        "userId": payload.userId,
+                        "subscriptionStatus":sub_status,
+                        "docusignClientId": payload.docusignClientId,
+                        "accessToken": accessToken
+                    })
+                 })
             } else {
                 return res.status(400).send({ message: "password incorrect" })
             }
