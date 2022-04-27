@@ -79,15 +79,14 @@ router.post('/login', (req, res) => {
 
                 Company.findOne({"_id":company_id}, (err, company) => {
 
-                    const end_subscribed_date = company.End_Date_of_Subscribption
                     const today = new Date()
                     var sub_status = ""
 
                     if (!company){
                         sub_status += "not belong to any company"
-                    } else if (!end_subscribed_date) {
+                    } else if (!company.End_Date_of_Subscribption) {
                         sub_status += "no plan for this company"
-                    } else if (today > end_subscribed_date) {
+                    } else if (today > company.End_Date_of_Subscribption) {
                         sub_status += "expired"
                     } else {
                         sub_status += "alive"
